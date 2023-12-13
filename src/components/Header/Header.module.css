@@ -1,0 +1,12 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    align-items: center;  
+  }
+
+.span {
+  margin-left: auto;
+  padding-right: 5px;
+  font-family: 'Open Sans', sans-serif;
+}
