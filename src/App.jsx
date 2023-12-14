@@ -1,7 +1,7 @@
 import Logo from './components/Header/components/Logo/Logo';
 import Button from './common/Button/Button';
 import styles from './components/Header/Header.module.css';
-import CourseCard from './components/Courses/components/CourseCard/CourseCard';
+import Courses from './components/Courses/Courses';
 
 function Header() {
 	const isAuthenticated = false;
@@ -19,7 +19,7 @@ function App() {
 	return (
 		<div>
 			<Header />
-			<CourseCard />
+			<Courses />
 		</div>
 	);
 }
