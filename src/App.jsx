@@ -1,25 +1,39 @@
-import Logo from './components/Header/components/Logo/Logo';
-import Button from './common/Button/Button';
-import styles from './components/Header/Header.module.css';
+import { useState } from 'react';
+
+import { mockedCoursesList, mockedAuthorsList } from './constants';
+
 import Courses from './components/Courses/Courses';
+import Header from './components/Header/Header';
+import CourseInfo from './components/CourseInfo/CourseInfo';
 
-function Header() {
-	const isAuthenticated = false;
-	const name = 'Vladyslav Raduta';
-	return (
-		<header className={styles.header}>
-			<Logo />
-			<span className={styles.span}>{name}</span>
-			<Button buttonText={isAuthenticated ? 'Logout' : 'Login'}></Button>
-		</header>
-	);
-}
-
+import styles from './components/Courses/Courses.module.css';
 function App() {
+	const [isActive, setActive] = useState(true);
+	const [selected, setSelected] = useState('');
+	const ShowCourseInfo = (status, courseID) => {
+		setActive(status);
+		setSelected(courseID);
+	};
+
 	return (
 		<div>
 			<Header />
-			<Courses />
+			{isActive ? (
+				<div className={styles.wrapper}>
+					<Courses
+						course={mockedCoursesList}
+						author={mockedAuthorsList}
+						ShowCourseInfo={ShowCourseInfo}
+					/>
+				</div>
+			) : (
+				<CourseInfo
+					course={mockedCoursesList}
+					author={mockedAuthorsList}
+					ShowCourseInfo={ShowCourseInfo}
+					selectedCourseID={selected}
+				/>
+			)}
 		</div>
 	);
 }

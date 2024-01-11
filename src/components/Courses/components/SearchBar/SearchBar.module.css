@@ -1,10 +1,16 @@
 .searchbar{
     margin-right: 15px;
     width: 300px;
-    padding: 10px;
+    padding: 15px;
+    margin-bottom: 8px;
     border: none;
     border-radius: 20px;
     font-size: 16px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     outline: none;
+}
+.wrapper{
+    display: flex;
+    align-content: center;
+    margin-bottom: 15px;
 }

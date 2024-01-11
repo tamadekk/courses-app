@@ -1,28 +1,24 @@
-import Button from '../../common/Button/Button';
-import styles from '../Courses/Courses.module.css';
+import EmptyCourseList from '../EmptyCourseList/EmptyCourseList';
 import CourseCard from './components/CourseCard/CourseCard';
 import SearchBar from './components/SearchBar/SearchBar';
-import { mockedCoursesList, mockedAuthorsList } from '../../constants';
 
-const Courses = (mockedCoursesList, mockedAuthorsList) => {
-	if (!CourseCard)
+import styles from '../Courses/Courses.module.css';
+
+const Courses = ({ course, author, ShowCourseInfo }) => {
+	if (course)
 		return (
 			<div>
+				<SearchBar />
 				<div className={styles.wrapper}>
-					<SearchBar />
-					<Button buttonText='Search' />
+					<CourseCard
+						course={course}
+						author={author}
+						ShowCourseInfo={ShowCourseInfo}
+					/>
 				</div>
 			</div>
 		);
-	else {
-		return (
-			<div className={styles.wrapperNOCOURSE}>
-				<h1>Your list is empty!</h1>
-				<p>Please use 'Add New Course' button to add your first course</p>
-				<Button buttonText='Add New Course' />
-			</div>
-		);
-	}
+	else return <EmptyCourseList />;
 };
 
 export default Courses;

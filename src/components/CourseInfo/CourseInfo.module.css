@@ -1,0 +1,33 @@
+.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: 50vh;
+}
+
+.innerwrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  width: 65vw;
+  background-color: #ebe3dc36;
+  border-radius: 8px;
+  box-shadow: 0 15px 8px rgba(0, 0, 0, 0.1);
+  margin: 0 15px 0 15px;
+  padding: 5px;
+  margin-bottom: 50px;
+}
+
+.innerwrapper > div {
+  box-sizing: content-box;
+  width: calc(50% - 15px);
+  padding-left: 15px;
+  color: #333333;
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 300;
+  line-height: 1.5625;
+  margin-bottom: 15px;
+  margin: 0 auto;
+}
