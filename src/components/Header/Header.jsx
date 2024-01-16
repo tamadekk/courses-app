@@ -1,21 +1,18 @@
 import styles from './Header.module.css';
 
-import { useState } from 'react';
-
 import Logo from './components/Logo/Logo';
 import Button from './../../common/Button/Button';
 
-const Header = () => {
-	const [isAuthenticated, setAuthenticated] = useState(false);
-	const name = 'Vladyslav Raduta';
+const Header = ({ isAuthenticated, handleTest, name }) => {
 	return (
 		<header className={styles.header}>
 			<Logo />
 			{isAuthenticated ? <span className={styles.span}>{name}</span> : ''}
 			<Button
-				onClick={() => setAuthenticated(!isAuthenticated)}
+				onClick={() => handleTest()}
 				buttonText={isAuthenticated ? 'Logout' : 'Login'}
-			></Button>
+				category='text'
+			/>
 		</header>
 	);
 };

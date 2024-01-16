@@ -6,8 +6,14 @@ import Courses from './components/Courses/Courses';
 import Header from './components/Header/Header';
 import CourseInfo from './components/CourseInfo/CourseInfo';
 
-import styles from './components/Courses/Courses.module.css';
-function App() {
+const App = () => {
+	const [isAuthenticated, setAuthenticated] = useState(false);
+	const name = 'Vladyslav Raduta';
+
+	const handleTest = () => {
+		setAuthenticated(!isAuthenticated);
+	};
+
 	const [isActive, setActive] = useState(true);
 	const [selected, setSelected] = useState('');
 	const ShowCourseInfo = (status, courseID) => {
@@ -17,15 +23,18 @@ function App() {
 
 	return (
 		<div>
-			<Header />
+			<Header
+				isAuthenticated={isAuthenticated}
+				handleTest={handleTest}
+				name={name}
+			/>
 			{isActive ? (
-				<div className={styles.wrapper}>
-					<Courses
-						course={mockedCoursesList}
-						author={mockedAuthorsList}
-						ShowCourseInfo={ShowCourseInfo}
-					/>
-				</div>
+				<Courses
+					course={mockedCoursesList}
+					author={mockedAuthorsList}
+					ShowCourseInfo={ShowCourseInfo}
+					isAuthenticated={isAuthenticated}
+				/>
 			) : (
 				<CourseInfo
 					course={mockedCoursesList}
@@ -36,6 +45,6 @@ function App() {
 			)}
 		</div>
 	);
-}
+};
 
 export default App;

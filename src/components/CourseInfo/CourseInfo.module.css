@@ -1,25 +1,31 @@
-.wrapper {
+.container {
   display: flex;
   align-items: center;
-  justify-content: center;
   flex-direction: column;
-  height: 50vh;
+  height: 100%;
+  position: relative;
 }
 
-.innerwrapper {
+.container >  h1 {
+  padding-right: 1100px;
+}
+
+.card {
+  box-sizing: border-box;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
+  align-items: stretch;
   width: 65vw;
-  background-color: #ebe3dc36;
-  border-radius: 8px;
-  box-shadow: 0 15px 8px rgba(0, 0, 0, 0.1);
-  margin: 0 15px 0 15px;
+  background-color: #ffffff;
+  border-radius: 5px;
+  border: 1px solid #3333333d; 
+  margin: 0 15px 50px 15px;
   padding: 5px;
-  margin-bottom: 50px;
+  position: relative;
 }
 
-.innerwrapper > div {
+.card>div {
   box-sizing: content-box;
   width: calc(50% - 15px);
   padding-left: 15px;
@@ -28,6 +34,11 @@
   font-size: 16px;
   font-weight: 300;
   line-height: 1.5625;
-  margin-bottom: 15px;
-  margin: 0 auto;
+  margin: 0 auto 15px;
+}
+
+.buttonContainer {
+  position: absolute;
+  right: -450px;
+  bottom: -100px;
 }

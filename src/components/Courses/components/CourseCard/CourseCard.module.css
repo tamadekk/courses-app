@@ -1,24 +1,30 @@
 .wrapper {
   display: flex;
-  justify-content: space-between;
-  width: 75%;
-  background-color: #ebe3dc36;
+  flex-direction: row;
+  width: 75vw;
+  background-color: #ffffff;
   border-radius: 8px;
-  box-shadow: 0 15px 8px rgba(0, 0, 0, 0.1); 
+  border-left: 10px solid;
+  box-shadow: 1px 1px 5px 3px rgba(50, 53, 54, 0.336);
   margin: 0 15px 50px 15px;
   padding: 5px;
+}
 
+.firstsection {
+  flex: 2;
+  padding: 20px;
+}
+
+.secondsection {
+  flex: 1;
+  padding: 15px;
+  line-height: 5px;
 
 }
 
-  .wrapper > div {
-    box-sizing: content-box;
-    width: calc(50% - 15px);
-    padding-left: 15px;
-    color: #333333;
-    font-family: "Helvetica Neue",Arial,sans-serif; 
-    font-size: 16px;
-    font-weight: 300;
-    line-height: 1.5625;
-    margin-bottom: 15px;
-  }
+.buttons {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 55px;
+}

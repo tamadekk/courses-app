@@ -10,7 +10,7 @@ const SearchBar = () => {
 				type='text'
 				placeholder='Input text'
 			></input>
-			<Button buttonText='Search' />
+			<Button buttonText='Search' category='text' />
 		</div>
 	);
 };
