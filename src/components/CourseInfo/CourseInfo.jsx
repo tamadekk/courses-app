@@ -9,6 +9,7 @@ import formatDuration from '../../helpers/formatDuration';
 
 const CourseInfo = ({ course, author, ShowCourseInfo, selectedCourseID }) => {
 	const [isToogled, setIsToogled] = useState(false);
+
 	const item = course.find((item) => item.id === selectedCourseID);
 	return (
 		<div>
@@ -20,8 +21,11 @@ const CourseInfo = ({ course, author, ShowCourseInfo, selectedCourseID }) => {
 						<h1>Description:</h1>
 						<p>{item.description}</p>
 					</div>
+					<hr />
 					<div>
-						<p>ID: {item.id}</p>
+						<p>
+							<b>ID:</b> {item.id}
+						</p>
 
 						<p>
 							<b>Duration:</b> <span>{formatDuration(item.duration)}</span>
