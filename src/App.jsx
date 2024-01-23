@@ -8,15 +8,16 @@ import CourseInfo from './components/CourseInfo/CourseInfo';
 
 const App = () => {
 	const [isAuthenticated, setAuthenticated] = useState(false);
+	const [isActive, setActive] = useState(true);
+	const [selected, setSelected] = useState('');
+
 	const name = 'Vladyslav Raduta';
 
 	const handleTest = () => {
 		setAuthenticated(!isAuthenticated);
 	};
 
-	const [isActive, setActive] = useState(true);
-	const [selected, setSelected] = useState('');
-	const ShowCourseInfo = (status, courseID) => {
+	const showCourseInfo = (status, courseID) => {
 		setActive(status);
 		setSelected(courseID);
 	};
@@ -32,14 +33,14 @@ const App = () => {
 				<Courses
 					course={mockedCoursesList}
 					author={mockedAuthorsList}
-					ShowCourseInfo={ShowCourseInfo}
+					showCourseInfo={showCourseInfo}
 					isAuthenticated={isAuthenticated}
 				/>
 			) : (
 				<CourseInfo
 					course={mockedCoursesList}
 					author={mockedAuthorsList}
-					ShowCourseInfo={ShowCourseInfo}
+					showCourseInfo={showCourseInfo}
 					selectedCourseID={selected}
 				/>
 			)}

@@ -7,7 +7,10 @@ import styles from './CourseCard.module.css';
 import formatDate from '../../../../helpers/formatDate';
 import formatDuration from '../../../../helpers/formatDuration';
 
-const CourseCard = ({ course, author, ShowCourseInfo, isAuthenticated }) => {
+import editButtonImage from '../../../../assets/icons/editButton.svg';
+import deleteButtonImage from '../../../../assets/icons/trashbinButton.svg';
+
+const CourseCard = ({ course, author, showCourseInfo, isAuthenticated }) => {
 	const [isToggled, setIsToggled] = useState(false);
 
 	return (
@@ -40,28 +43,27 @@ const CourseCard = ({ course, author, ShowCourseInfo, isAuthenticated }) => {
 									<Button
 										onClick={() => {
 											setIsToggled(!isToggled);
-											ShowCourseInfo(false, item.id);
+											showCourseInfo(false, item.id);
 										}}
 										buttonText='Show Course'
 										category='text'
 									/>
-									<Button category='deleteCourse' />
-									<Button category='editCourse' />
+									<Button icon={editButtonImage} />
+									<Button icon={deleteButtonImage} />
 								</div>
 							) : (
 								<div className={styles.buttons}>
 									<Button
 										onClick={() => {
 											setIsToggled(!isToggled);
-											ShowCourseInfo(false, item.id);
+											showCourseInfo(false, item.id);
 										}}
 										buttonText='Show Course'
-										category='text'
 									/>
 								</div>
 							)}
 
-							{isToggled && ShowCourseInfo(false, item.id)}
+							{isToggled && showCourseInfo(false, item.id)}
 						</div>
 					</div>
 				</div>

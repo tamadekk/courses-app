@@ -9,8 +9,3 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     outline: none;
 }
-.wrapper{
-    display: flex;
-    align-content: center;
-    margin-bottom: 15px;
-}

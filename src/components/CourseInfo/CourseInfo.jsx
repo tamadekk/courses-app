@@ -1,5 +1,3 @@
-import { useState } from 'react';
-
 import Button from '../../common/Button/Button';
 
 import styles from './CourseInfo.module.css';
@@ -7,9 +5,7 @@ import styles from './CourseInfo.module.css';
 import formatDate from '../../helpers/formatDate';
 import formatDuration from '../../helpers/formatDuration';
 
-const CourseInfo = ({ course, author, ShowCourseInfo, selectedCourseID }) => {
-	const [isToogled, setIsToogled] = useState(false);
-
+const CourseInfo = ({ course, author, showCourseInfo, selectedCourseID }) => {
 	const item = course.find((item) => item.id === selectedCourseID);
 	return (
 		<div>
@@ -46,8 +42,7 @@ const CourseInfo = ({ course, author, ShowCourseInfo, selectedCourseID }) => {
 					<div className={styles.buttonContainer}>
 						<Button
 							onClick={() => {
-								setIsToogled(!isToogled);
-								ShowCourseInfo(true);
+								showCourseInfo(true);
 							}}
 							buttonText='Back'
 							category='text'

@@ -7,7 +7,7 @@ const Header = ({ isAuthenticated, handleTest, name }) => {
 	return (
 		<header className={styles.header}>
 			<Logo />
-			{isAuthenticated ? <span className={styles.span}>{name}</span> : ''}
+			{isAuthenticated ? <p className={styles.p}>{name}</p> : ''}
 			<Button
 				onClick={() => handleTest()}
 				buttonText={isAuthenticated ? 'Logout' : 'Login'}
