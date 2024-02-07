@@ -44,7 +44,7 @@
   bottom: -100px;
 }
 
-hr{
-  color: #cfcfcf48;
-  height: 220px;
+.div_hr{
+  border-left: 1px solid #4949493d;
+  border-width: 1.5px;
 }

@@ -57,7 +57,12 @@ const Courses = ({ course, author, showCourseInfo, isAuthenticated }) => {
 			</div>
 		);
 	} else {
-		return <EmptyCourseList />;
+		return (
+			<EmptyCourseList
+				tittle='Your list is empty!'
+				message='Please use Add New Course button to add your first course'
+			/>
+		);
 	}
 };
 

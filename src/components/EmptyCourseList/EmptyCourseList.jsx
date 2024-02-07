@@ -1,11 +1,11 @@
 import styles from './EmptyCourseList.module.css';
 import Button from '../../common/Button/Button';
 
-const EmptyCourseList = () => {
+const EmptyCourseList = ({ tittle, message }) => {
 	return (
 		<div className={styles.wrapper}>
-			<h1>Your list is empty!</h1>
-			<p>Please use 'Add New Course' button to add your first course</p>
+			<h1>{tittle}</h1>
+			<p>{message}</p>
 			<Button buttonText='Add New Course' category='text' />
 		</div>
 	);

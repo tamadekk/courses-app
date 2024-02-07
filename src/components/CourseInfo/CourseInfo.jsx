@@ -7,6 +7,14 @@ import formatDuration from '../../helpers/formatDuration';
 
 const CourseInfo = ({ course, author, showCourseInfo, selectedCourseID }) => {
 	const item = course.find((item) => item.id === selectedCourseID);
+
+	const getAuthorsFiltered = (authors) => {
+		return authors
+			.filter((el) => item.authors.includes(el.id))
+			.map((el) => el.name)
+			.join(',');
+	};
+
 	return (
 		<div>
 			<div className={styles.container}>
@@ -17,8 +25,7 @@ const CourseInfo = ({ course, author, showCourseInfo, selectedCourseID }) => {
 						<h1>Description:</h1>
 						<p>{item.description}</p>
 					</div>
-					<hr />
-					<div>
+					<div className={styles.div_hr}>
 						<p>
 							<b>ID:</b> {item.id}
 						</p>
@@ -31,12 +38,7 @@ const CourseInfo = ({ course, author, showCourseInfo, selectedCourseID }) => {
 						</p>
 						<p>
 							<b>Authors:</b>
-							<span>
-								{author
-									.filter((el) => item.authors.includes(el.id))
-									.map((el) => el.name)
-									.join(',')}
-							</span>
+							<span>{getAuthorsFiltered(author)}</span>
 						</p>
 					</div>
 					<div className={styles.buttonContainer}>

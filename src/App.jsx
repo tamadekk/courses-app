@@ -1,10 +1,15 @@
 import { useState } from 'react';
 
+import { Routes, Route } from 'react-router-dom';
+
 import { mockedCoursesList, mockedAuthorsList } from './constants';
 
 import Courses from './components/Courses/Courses';
 import Header from './components/Header/Header';
 import CourseInfo from './components/CourseInfo/CourseInfo';
+
+import { Login } from './components/Login/Login.jsx';
+import { Registration } from './components/Registration/Registration.jsx';
 
 const App = () => {
 	const [isAuthenticated, setAuthenticated] = useState(false);
