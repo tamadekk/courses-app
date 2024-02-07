@@ -3,10 +3,13 @@
     justify-content: space-between;
     padding: 10px;
     align-items: center;  
+    box-shadow: 0 8px 8px rgba(0, 0, 0, 0.1); 
+    background-color: #ffffff;
+    
   }
 
-.span {
+.p {
   margin-left: auto;
-  padding-right: 5px;
+  padding-right: 25px;
   font-family: 'Open Sans', sans-serif;
 }
