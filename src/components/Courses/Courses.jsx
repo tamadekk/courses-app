@@ -6,7 +6,7 @@ import styles from '../Courses/Courses.module.css';
 
 import { useState } from 'react';
 
-const Courses = ({ course, author, showCourseInfo, isAuthenticated }) => {
+const Courses = ({ course, author, isAuthenticated }) => {
 	const [data, setData] = useState(null);
 	const [filteredCourses, setFilteredCourses] = useState(null);
 
@@ -50,7 +50,6 @@ const Courses = ({ course, author, showCourseInfo, isAuthenticated }) => {
 					<CourseCard
 						course={filteredCourses !== null ? filteredCourses : course}
 						author={author}
-						showCourseInfo={showCourseInfo}
 						isAuthenticated={isAuthenticated}
 					/>
 				</div>

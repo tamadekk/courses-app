@@ -1,12 +1,12 @@
+import { useParams, Link } from 'react-router-dom';
 import Button from '../../common/Button/Button';
-
 import styles from './CourseInfo.module.css';
-
 import formatDate from '../../helpers/formatDate';
 import formatDuration from '../../helpers/formatDuration';
 
-const CourseInfo = ({ course, author, showCourseInfo, selectedCourseID }) => {
-	const item = course.find((item) => item.id === selectedCourseID);
+const CourseInfo = ({ course, author }) => {
+	const { courseId } = useParams();
+	const item = course.find((item) => item.id === courseId);
 
 	const getAuthorsFiltered = (authors) => {
 		return authors
@@ -42,17 +42,14 @@ const CourseInfo = ({ course, author, showCourseInfo, selectedCourseID }) => {
 						</p>
 					</div>
 					<div className={styles.buttonContainer}>
-						<Button
-							onClick={() => {
-								showCourseInfo(true);
-							}}
-							buttonText='Back'
-							category='text'
-						/>
+						<Link to='/courses'>
+							<Button buttonText='Back' category='text' />
+						</Link>
 					</div>
 				</div>
 			</div>
 		</div>
 	);
 };
+
 export default CourseInfo;

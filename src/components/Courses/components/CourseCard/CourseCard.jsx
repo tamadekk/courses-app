@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 
+import { Link } from 'react-router-dom';
+
 import Button from '../../../../common/Button/Button';
 
 import styles from './CourseCard.module.css';
@@ -10,7 +12,7 @@ import formatDuration from '../../../../helpers/formatDuration';
 import editButtonImage from '../../../../assets/icons/editButton.svg';
 import deleteButtonImage from '../../../../assets/icons/trashbinButton.svg';
 
-const CourseCard = ({ course, author, showCourseInfo, isAuthenticated }) => {
+const CourseCard = ({ course, author, isAuthenticated }) => {
 	const [isToggled, setIsToggled] = useState(false);
 
 	return (
@@ -40,30 +42,31 @@ const CourseCard = ({ course, author, showCourseInfo, isAuthenticated }) => {
 							</p>
 							{isAuthenticated ? (
 								<div className={styles.buttons}>
-									<Button
-										onClick={() => {
-											setIsToggled(!isToggled);
-											showCourseInfo(false, item.id);
-										}}
-										buttonText='Show Course'
-										category='text'
-									/>
+									<Link to={`/courses/${item.id}`}>
+										<Button
+											onClick={() => {
+												setIsToggled(!isToggled);
+											}}
+											buttonText='Show Course'
+										/>
+									</Link>
 									<Button icon={editButtonImage} />
 									<Button icon={deleteButtonImage} />
 								</div>
 							) : (
 								<div className={styles.buttons}>
-									<Button
-										onClick={() => {
-											setIsToggled(!isToggled);
-											showCourseInfo(false, item.id);
-										}}
-										buttonText='Show Course'
-									/>
+									<Link to={`/courses/${item.id}`}>
+										<Button
+											onClick={() => {
+												setIsToggled(!isToggled);
+											}}
+											buttonText='Show Course'
+										/>
+									</Link>
 								</div>
 							)}
 
-							{isToggled && showCourseInfo(false, item.id)}
+							{isToggled}
 						</div>
 					</div>
 				</div>
