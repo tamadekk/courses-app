@@ -4,3 +4,7 @@
     margin-top: 25px;
 }
 
+.SeachBarRow{
+    display: flex;
+    justify-content: space-between;
+}

@@ -1,10 +1,14 @@
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+
 import EmptyCourseList from '../EmptyCourseList/EmptyCourseList';
 import CourseCard from './components/CourseCard/CourseCard';
 import SearchBar from '../../common/SearchBar/SearchBar';
 
-import styles from '../Courses/Courses.module.css';
+import Button from '../../common/Button/Button';
 
-import { useState } from 'react';
+import styles from '../Courses/Courses.module.css';
+import CreateCourse from '../CreateCourse/CreateCourse';
 
 const Courses = ({ course, author, isAuthenticated }) => {
 	const [data, setData] = useState(null);
@@ -42,10 +46,15 @@ const Courses = ({ course, author, isAuthenticated }) => {
 		return (
 			<div className={styles.container}>
 				<div>
-					<SearchBar
-						onSearchChange={onSearchChange}
-						buttonHandler={buttonHandler}
-					/>
+					<div className={styles.SeachBarRow}>
+						<SearchBar
+							onSearchChange={onSearchChange}
+							buttonHandler={buttonHandler}
+						/>
+						<Link to='courses/add' element={CreateCourse}>
+							<Button buttonText='Add new course' category='text' />
+						</Link>
+					</div>
 
 					<CourseCard
 						course={filteredCourses !== null ? filteredCourses : course}
