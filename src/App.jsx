@@ -7,6 +7,7 @@ import Header from './components/Header/Header';
 import CourseInfo from './components/CourseInfo/CourseInfo';
 import Login from './components/Login/Login.jsx';
 import Registration from './components/Registration/Registration.jsx';
+import CreateCourse from './components/CreateCourse/CreateCourse.jsx';
 
 const App = () => {
 	const [isAuthenticated, setAuthenticated] = useState(false);
@@ -54,6 +55,7 @@ const App = () => {
 				</Route>
 				<Route path='/login' element={<Login />} />
 				<Route path='/registration' element={<Registration />} />
+				<Route path='/courses/add' element={<CreateCourse />} />
 			</Routes>
 		</div>
 	);

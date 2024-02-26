@@ -8,7 +8,6 @@ import SearchBar from '../../common/SearchBar/SearchBar';
 import Button from '../../common/Button/Button';
 
 import styles from '../Courses/Courses.module.css';
-import CreateCourse from '../CreateCourse/CreateCourse';
 
 const Courses = ({ course, author, isAuthenticated }) => {
 	const [data, setData] = useState(null);
@@ -51,7 +50,7 @@ const Courses = ({ course, author, isAuthenticated }) => {
 							onSearchChange={onSearchChange}
 							buttonHandler={buttonHandler}
 						/>
-						<Link to='courses/add' element={CreateCourse}>
+						<Link to='/courses/add'>
 							<Button buttonText='Add new course' category='text' />
 						</Link>
 					</div>
