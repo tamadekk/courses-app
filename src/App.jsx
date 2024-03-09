@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Routes, Route, Outlet } from 'react-router-dom';
+import { Routes, Route, Outlet, useNavigate } from 'react-router-dom';
 import { mockedCoursesList, mockedAuthorsList } from './constants';
 
 import Courses from './components/Courses/Courses';
@@ -20,30 +20,35 @@ const App = () => {
 	const [authors, setAuthors] = useState([]);
 	const [isValid, setIsValid] = useState(true);
 
-	useEffect(() => {
-		setCourses(mockedCoursesList);
-	}, []);
+	const navigate = useNavigate();
 
 	useEffect(() => {
+		setCourses(mockedCoursesList);
 		setAuthors(mockedAuthorsList);
 	}, []);
 
-	const handleTest = () => {
-		setAuthenticated(!isAuthenticated);
-	};
+	useEffect(() => {
+		const token = localStorage.getItem('token');
+		if (token) {
+			setAuthenticated(true);
+		} else {
+			if (window.location.pathname !== '/registration') {
+				navigate('/login');
+			}
+		}
+	}, [isAuthenticated, navigate]);
+
 	if (courses.length === 0) return <h1>No Data</h1>;
+
 	return (
 		<div>
 			<Routes>
+				{isAuthenticated && <Route path='/courses' />}
 				<Route
 					path='/courses'
 					element={
 						<>
-							<Header
-								isAuthenticated={isAuthenticated}
-								handleTest={handleTest}
-								userData={userData}
-							/>
+							<Header isAuthenticated={isAuthenticated} userData={userData} />
 							<Outlet />
 						</>
 					}

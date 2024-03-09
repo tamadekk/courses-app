@@ -21,7 +21,7 @@ const Header = () => {
 		<header className={styles.header}>
 			<Logo />
 			{getIsLoggedIn() ? <p className={styles.p}>test</p> : ''}
-			<Link to={getIsLoggedIn() ? '/login' : '/registration'}>
+			<Link to={'/login'}>
 				{!['/login', '/registration'].includes(location.pathname) && (
 					<Button
 						buttonText={getIsLoggedIn() ? 'Logout' : 'Login'}
