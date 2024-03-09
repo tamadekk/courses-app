@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
+
 import { Link } from 'react-router-dom';
 
 import EmptyCourseList from '../EmptyCourseList/EmptyCourseList';
@@ -9,26 +10,23 @@ import Button from '../../common/Button/Button';
 
 import styles from '../Courses/Courses.module.css';
 
-const Courses = ({ course, author, isAuthenticated }) => {
-	const [data, setData] = useState(null);
+const Courses = ({ courses, authors, isAuthenticated }) => {
+	const [querry, setQuery] = useState(null);
 	const [filteredCourses, setFilteredCourses] = useState(null);
-
 	const onSearchChange = (input) => {
-		setData(input.target.value);
+		setQuery(input.target.value);
 	};
-
-	const getFilteredCourse = (course, lowercasedData) => {
-		return (course = course.filter((el) =>
+	const getFilteredCourse = (courses, lowercasedData) => {
+		return courses.filter((el) =>
 			authorAttributes.some((item) =>
 				String(el[item]).toLowerCase().includes(lowercasedData)
 			)
-		));
+		);
 	};
-
-	const buttonHandler = () => {
-		if (data === null) return course;
-		const lowercasedData = data.toLowerCase();
-		const courseFiltered = getFilteredCourse(course, lowercasedData);
+	const searchHandlerButton = () => {
+		if (!querry) return;
+		const lowercasedData = querry.toLowerCase();
+		const courseFiltered = getFilteredCourse(courses, lowercasedData);
 		setFilteredCourses(courseFiltered);
 	};
 
@@ -40,15 +38,14 @@ const Courses = ({ course, author, isAuthenticated }) => {
 		'authors',
 		'creationDate',
 	];
-
-	if (course.length > 0) {
+	if (courses.length > 0) {
 		return (
 			<div className={styles.container}>
 				<div>
 					<div className={styles.SeachBarRow}>
 						<SearchBar
 							onSearchChange={onSearchChange}
-							buttonHandler={buttonHandler}
+							buttonHandler={searchHandlerButton}
 						/>
 						<Link to='/courses/add'>
 							<Button buttonText='Add new course' category='text' />
@@ -56,8 +53,8 @@ const Courses = ({ course, author, isAuthenticated }) => {
 					</div>
 
 					<CourseCard
-						course={filteredCourses !== null ? filteredCourses : course}
-						author={author}
+						courses={filteredCourses !== null ? filteredCourses : courses}
+						authors={authors}
 						isAuthenticated={isAuthenticated}
 					/>
 				</div>
@@ -66,7 +63,7 @@ const Courses = ({ course, author, isAuthenticated }) => {
 	} else {
 		return (
 			<EmptyCourseList
-				tittle='Your list is empty!'
+				title='Your list is empty!'
 				message='Please use Add New Course button to add your first course'
 			/>
 		);

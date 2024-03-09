@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Routes, Route, Outlet } from 'react-router-dom';
 import { mockedCoursesList, mockedAuthorsList } from './constants';
 
@@ -11,12 +11,27 @@ import CreateCourse from './components/CreateCourse/CreateCourse.jsx';
 
 const App = () => {
 	const [isAuthenticated, setAuthenticated] = useState(false);
-	const name = 'Vladyslav Raduta';
+	const [userData, setUserData] = useState({
+		name: '',
+		email: '',
+		password: '',
+	});
+	const [courses, setCourses] = useState([]);
+	const [authors, setAuthors] = useState([]);
+	const [isValid, setIsValid] = useState(true);
+
+	useEffect(() => {
+		setCourses(mockedCoursesList);
+	}, []);
+
+	useEffect(() => {
+		setAuthors(mockedAuthorsList);
+	}, []);
 
 	const handleTest = () => {
 		setAuthenticated(!isAuthenticated);
 	};
-
+	if (courses.length === 0) return <h1>No Data</h1>;
 	return (
 		<div>
 			<Routes>
@@ -27,7 +42,7 @@ const App = () => {
 							<Header
 								isAuthenticated={isAuthenticated}
 								handleTest={handleTest}
-								name={name}
+								userData={userData}
 							/>
 							<Outlet />
 						</>
@@ -37,25 +52,51 @@ const App = () => {
 						index
 						element={
 							<Courses
-								course={mockedCoursesList}
-								author={mockedAuthorsList}
+								courses={courses}
+								authors={authors}
 								isAuthenticated={isAuthenticated}
 							/>
 						}
 					/>
 					<Route
 						path=':courseId'
-						element={
-							<CourseInfo
-								course={mockedCoursesList}
-								author={mockedAuthorsList}
-							/>
-						}
+						element={<CourseInfo courses={courses} authors={authors} />}
 					/>
 				</Route>
-				<Route path='/login' element={<Login />} />
-				<Route path='/registration' element={<Registration />} />
-				<Route path='/courses/add' element={<CreateCourse />} />
+				<Route
+					path='/login'
+					element={
+						<Login
+							isValid={isValid}
+							setIsValid={setIsValid}
+							userData={userData}
+							setUserData={setUserData}
+						/>
+					}
+				/>
+				<Route
+					path='/registration'
+					element={
+						<Registration
+							isValid={isValid}
+							setIsValid={setIsValid}
+							userData={userData}
+							setUserData={setUserData}
+						/>
+					}
+				/>
+				<Route
+					path='/courses/add'
+					element={
+						<CreateCourse
+							setCourses={setCourses}
+							authors={authors}
+							setAuthors={setAuthors}
+							isValid={isValid}
+							setIsValid={setIsValid}
+						/>
+					}
+				/>
 			</Routes>
 		</div>
 	);

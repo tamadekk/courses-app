@@ -4,10 +4,9 @@ import styles from './CourseInfo.module.css';
 import formatDate from '../../helpers/formatDate';
 import formatDuration from '../../helpers/formatDuration';
 
-const CourseInfo = ({ course, author }) => {
+const CourseInfo = ({ courses, authors }) => {
 	const { courseId } = useParams();
-	const item = course.find((item) => item.id === courseId);
-
+	const item = courses.find((item) => item.id === courseId);
 	const getAuthorsFiltered = (authors) => {
 		return authors
 			.filter((el) => item.authors.includes(el.id))
@@ -38,11 +37,11 @@ const CourseInfo = ({ course, author }) => {
 						</p>
 						<p>
 							<b>Authors:</b>
-							<span>{getAuthorsFiltered(author)}</span>
+							<span>{getAuthorsFiltered(authors)}</span>
 						</p>
 					</div>
 					<div className={styles.buttonContainer}>
-						<Link to='/courses'>
+						<Link to='/courses/'>
 							<Button buttonText='Back' category='text' />
 						</Link>
 					</div>

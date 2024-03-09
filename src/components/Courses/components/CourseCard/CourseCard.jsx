@@ -1,23 +1,21 @@
 import React, { useState } from 'react';
-
 import { Link } from 'react-router-dom';
-
 import Button from '../../../../common/Button/Button';
-
 import styles from './CourseCard.module.css';
-
 import formatDate from '../../../../helpers/formatDate';
 import formatDuration from '../../../../helpers/formatDuration';
-
 import editButtonImage from '../../../../assets/icons/editButton.svg';
 import deleteButtonImage from '../../../../assets/icons/trashbinButton.svg';
 
-const CourseCard = ({ course, author, isAuthenticated }) => {
+const CourseCard = ({ courses, authors, isAuthenticated }) => {
 	const [isToggled, setIsToggled] = useState(false);
+	const toggleVisibility = () => {
+		setIsToggled(!isToggled);
+	};
 
 	return (
 		<div>
-			{course.map((item) => (
+			{courses.map((item) => (
 				<div className={styles.wrapper} key={item.id}>
 					<div className={styles.firstsection}>
 						<h1>{item.title}</h1>
@@ -28,7 +26,7 @@ const CourseCard = ({ course, author, isAuthenticated }) => {
 							<p>
 								<b>Authors: </b>
 								<span>
-									{author
+									{authors
 										.filter((el) => item.authors.includes(el.id))
 										.map((el) => el.name)
 										.join(',')}
@@ -40,33 +38,33 @@ const CourseCard = ({ course, author, isAuthenticated }) => {
 							<p>
 								<b>Created:</b> <span>{formatDate(item.creationDate)}</span>
 							</p>
-							{isAuthenticated ? (
+							{isAuthenticated && (
 								<div className={styles.buttons}>
 									<Link to={`/courses/${item.id}`}>
 										<Button
-											onClick={() => {
-												setIsToggled(!isToggled);
-											}}
+											onClick={toggleVisibility}
 											buttonText='Show Course'
 										/>
 									</Link>
 									<Button icon={editButtonImage} />
 									<Button icon={deleteButtonImage} />
 								</div>
-							) : (
+							)}
+							{!isAuthenticated && (
 								<div className={styles.buttons}>
-									<Link to={`/courses/${item.id}`}>
+									<Link
+										to={{
+											pathname: `/courses/${item.id}`,
+											courses,
+										}}
+									>
 										<Button
-											onClick={() => {
-												setIsToggled(!isToggled);
-											}}
+											onClick={toggleVisibility}
 											buttonText='Show Course'
 										/>
 									</Link>
 								</div>
 							)}
-
-							{isToggled}
 						</div>
 					</div>
 				</div>

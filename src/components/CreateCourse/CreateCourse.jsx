@@ -1,88 +1,210 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
+import { useNavigate, Link } from 'react-router-dom';
 
 import styles from './CreateCourse.module.css';
 
 import Header from '../Header/Header';
 import Input from '../../common/Input/Input';
+import AuthorItem from './components/AuthorItem/AuthorItem';
 import Button from '../../common/Button/Button';
 
-const CreateCourse = () => {
-	const [userData, setUserdata] = useState({
+import formatDuration from '../../helpers/formatDuration';
+import getCurrentDate from '../../helpers/getCurrentDate';
+
+const CreateCourse = ({
+	setCourses,
+	authors,
+	setAuthors,
+	isValid,
+	setIsValid,
+}) => {
+	const [authorsList, setAuthorsList] = useState(authors);
+	const [courseAuthorsList, setCourseAuthorsList] = useState([]);
+	const [title, setTitle] = useState('');
+	const [description, setDescription] = useState('');
+	const [duration, setDuration] = useState(0);
+	const [author, setAuthor] = useState({
+		id: uuidv4(),
 		name: '',
-		email: '',
-		password: '',
 	});
+	const navigate = useNavigate();
 
-	const handleTest = (e) => {
-		userData[e.target.name] = e.target.value;
-		setUserdata(userData);
+	const handleTitleChange = (event) => {
+		const regex = /[A-Za-z]/;
+		const value = event.target.value;
+		if (regex.test(value) && value.length > 2) setTitle(value);
 	};
 
-	const submitUserData = (e) => {
-		e.preventDefault();
-		fetch('http://localhost:4000/register/', {
-			method: 'POST',
-			body: JSON.stringify(userData),
-			headers: {
-				'Content-Type': 'application/json',
-			},
+	const handleDescriptionChange = (event) => {
+		const value = event.target.value;
+		if (value.length >= 0) setDescription(value);
+	};
+
+	const handleDurationChange = (event) => {
+		const value = event.target.value;
+		if (value > 0) setDuration(value);
+	};
+
+	const handleAuthorChange = (event) => {
+		const value = event.target.value;
+		if (value.length > 2) {
+			setAuthor((prevAuthor) => ({
+				...prevAuthor,
+				name: value,
+			}));
+		}
+	};
+	const handleCreateAuthor = () => {
+		const newAuthor = {
+			id: uuidv4(),
+			name: author.name,
+		};
+		if (newAuthor.name.length > 2) {
+			setAuthorsList((prevAuthorsList) => [...prevAuthorsList, newAuthor]);
+			setAuthors((prev) => [...prev, newAuthor]);
+		}
+	};
+
+	const handleAddAuthor = (authorId) => {
+		const editedAuthor = authorsList.find((author) => author.id === authorId);
+		if (editedAuthor) {
+			setCourseAuthorsList((prevCourseAuthorsList) => [
+				...prevCourseAuthorsList,
+				editedAuthor,
+			]);
+
+			setAuthorsList((prevAuthorsList) =>
+				prevAuthorsList.filter((author) => author.id !== authorId)
+			);
+		}
+	};
+	const handleDeleteAuthor = (authorId) => {
+		const deletedAuthor = courseAuthorsList.find(
+			(author) => author.id === authorId
+		);
+		if (deletedAuthor) {
+			setAuthorsList((prevAuthorsList) => [...prevAuthorsList, deletedAuthor]);
+
+			setCourseAuthorsList((prevCourseAuthorsList) =>
+				prevCourseAuthorsList.filter((author) => author.id !== authorId)
+			);
+		}
+	};
+	const submitCourse = (event) => {
+		event.preventDefault();
+		if (!(title && description && duration)) {
+			setIsValid(false);
+			return;
+		}
+
+		const newCourse = {
+			id: uuidv4(),
+			title,
+			description,
+			creationDate: getCurrentDate(),
+			duration: parseInt(duration),
+			authors: courseAuthorsList.map((author) => author.id),
+		};
+		setCourses((prev) => {
+			return [...prev, newCourse];
 		});
+		navigate('/courses/');
 	};
+
 	return (
 		<>
 			<Header />
 			<div className={styles.container}>
 				<h1>Course Edit/Create Course</h1>
 				<div className={styles.formContainer}>
-					<form onSubmit={(e) => submitUserData(e)}>
+					<form onSubmit={(e) => submitCourse(e)}>
 						<h1>Main info</h1>
-						<label>
-							<b>Title</b>
-							<Input
-								type='text'
-								name='title'
-								isRequired
-								getData={handleTest}
-								value={userData.name}
+						<Input
+							type='text'
+							name='Title'
+							value={title}
+							onChange={handleTitleChange}
+							isRequired
+							placeholderText='Input text'
+							isValid={isValid}
+						/>
+						<div className={styles.descriptionSection}>
+							<label>
+								<b>Description</b>
+							</label>
+							<textarea
+								placeholder='Input text'
+								value={description}
+								onChange={handleDescriptionChange}
+								required
+								className={isValid ? styles.textarea : styles.invalidTextarea}
 							/>
-						</label>
-						<label>
-							<b>Description</b>
-							<textarea></textarea>
-						</label>
-						<div>
-							<h1>Duration</h1>
+							{!isValid && (
+								<p id={styles.descriptionRequiredMessage}>
+									Description is required
+								</p>
+							)}
+						</div>
+
+						<h1>Duration</h1>
+
+						<div className={styles.authorDurationSection}>
 							<div>
-								<label>
-									<b>Duration</b>
+								<div>
 									<Input
-										type='text'
-										name='duration'
-										isRequired
-										getData={handleTest}
-										value={userData.password}
+										type='number'
+										name='Duration'
+										value={duration}
+										onChange={handleDurationChange}
+										labelText='Duration'
+										placeholderText='Input text'
+										isValid={isValid}
 									/>
-									<p>x:xx hours</p>
-								</label>
+									<p>
+										<b>{formatDuration(duration)}</b>
+									</p>
+								</div>
+
+								<h1>Authors</h1>
+
+								<Input
+									type='text'
+									name='authorName'
+									value={author}
+									onChange={handleAuthorChange}
+									labelText='Author name'
+									placeholderText='Input text'
+								/>
+								<Button
+									buttonText='create author'
+									category='text'
+									type='button'
+									onClick={handleCreateAuthor}
+								/>
+
+								<h1>Authors List</h1>
+								<AuthorItem
+									authors={authorsList}
+									handleAddAuthor={handleAddAuthor}
+									onDeleteButtonClick={handleDeleteAuthor}
+								/>
 							</div>
-							<h1>Authors</h1>
-							<div>
-								<label>
-									<b>Author name</b>
-									<Input
-										type='text'
-										name='authorName'
-										isRequired
-										getData={handleTest}
-										value={userData.password}
-									/>
-									<Button buttonText='add author' category='text' />
-								</label>
+							<div className={styles.CourseAuthors}>
+								<h1>Course Authors</h1>
+								<AuthorItem
+									authors={courseAuthorsList}
+									onDeleteButtonClick={handleDeleteAuthor}
+								/>
 							</div>
 						</div>
-						<Button type='submit' buttonText='Registration' />
 					</form>
+					<div className={styles.ButtonRow}>
+						<Button buttonText='create course' onClick={submitCourse} />
+						<Link to='/courses/'>
+							<Button type='submit' buttonText='cancel' />
+						</Link>
+					</div>
 				</div>
 			</div>
 		</>

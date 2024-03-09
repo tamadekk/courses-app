@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import { Link } from 'react-router-dom';
 
@@ -10,32 +10,42 @@ import Button from '../../common/Button/Button';
 
 import styles from './Registration.module.css';
 
-const Registration = () => {
-	const [userData, setUserdata] = useState({
-		name: '',
-		email: '',
-		password: '',
-	});
-
-	const handleTest = (e) => {
+const Registration = ({ isValid, setIsValid, userData, setUserData }) => {
+	const handleInputChange = (e) => {
 		userData[e.target.name] = e.target.value;
-		setUserdata(userData);
+		setUserData(userData);
 	};
 
 	const submitUserData = (e) => {
 		e.preventDefault();
+		if (!(userData.name && userData.email && userData.password)) {
+			setIsValid(false);
+			return;
+		}
 		fetch('http://localhost:4000/register/', {
 			method: 'POST',
 			body: JSON.stringify(userData),
 			headers: {
 				'Content-Type': 'application/json',
 			},
-		});
+		})
+			.then((res) => res.json())
+			.then((data) => {
+				if (data.successful) {
+					localStorage.setItem('token', data.result);
+					window.location.href = '/courses';
+				} else {
+					console.error('Invalid data');
+				}
+			})
+			.catch((error) => {
+				console.error('Error during registration:', error);
+			});
 	};
 
 	return (
 		<>
-			<Header />
+			<Header userData={userData} />
 			<div className={styles.container}>
 				<div className={styles.formContainer}>
 					<form onSubmit={(e) => submitUserData(e)}>
@@ -45,8 +55,9 @@ const Registration = () => {
 								type='text'
 								name='name'
 								isRequired
-								getData={handleTest}
+								onChange={handleInputChange}
 								value={userData.name}
+								isValid={isValid}
 							/>
 						</label>
 						<label>
@@ -54,9 +65,9 @@ const Registration = () => {
 							<Input
 								type='email'
 								name='email'
-								isRequired
-								getData={handleTest}
+								onChange={handleInputChange}
 								value={userData.email}
+								isValid={isValid}
 							/>
 						</label>
 						<label>
@@ -64,16 +75,16 @@ const Registration = () => {
 							<Input
 								type='password'
 								name='password'
-								isRequired
-								getData={handleTest}
+								onChange={handleInputChange}
 								value={userData.password}
+								isValid={isValid}
 							/>
 						</label>
-						<Button type='submit' buttonText='Registration' />
+						<Button onClick={submitUserData} buttonText='Registration' />
 						<p>
 							If you have an account you may{' '}
 							<b>
-								<Link to='/Login' className={styles.Link}>
+								<Link to='/login' className={styles.Link}>
 									Login
 								</Link>
 							</b>
