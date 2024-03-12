@@ -6,10 +6,8 @@ import styles from './Header.module.css';
 import Logo from './components/Logo/Logo';
 import Button from './../../common/Button/Button';
 
-// const Header = ({ userData }) => {
-const Header = () => {
+const Header = ({ userData }) => {
 	const location = useLocation();
-
 	const handleLogout = () => {
 		localStorage.removeItem('token');
 	};
@@ -20,7 +18,7 @@ const Header = () => {
 	return (
 		<header className={styles.header}>
 			<Logo />
-			{getIsLoggedIn() ? <p className={styles.p}>test</p> : ''}
+			{getIsLoggedIn() ? <p className={styles.p}>{userData.name}</p> : ''}
 			<Link to={'/login'}>
 				{!['/login', '/registration'].includes(location.pathname) && (
 					<Button

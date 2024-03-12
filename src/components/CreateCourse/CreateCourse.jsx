@@ -18,6 +18,7 @@ const CreateCourse = ({
 	setAuthors,
 	isValid,
 	setIsValid,
+	userData,
 }) => {
 	const [authorsList, setAuthorsList] = useState(authors);
 	const [courseAuthorsList, setCourseAuthorsList] = useState([]);
@@ -114,7 +115,7 @@ const CreateCourse = ({
 
 	return (
 		<>
-			<Header />
+			<Header userData={userData} />
 			<div className={styles.container}>
 				<h1>Course Edit/Create Course</h1>
 				<div className={styles.formContainer}>

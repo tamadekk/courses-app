@@ -99,6 +99,7 @@ const App = () => {
 							setAuthors={setAuthors}
 							isValid={isValid}
 							setIsValid={setIsValid}
+							userData={userData}
 						/>
 					}
 				/>

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import Header from '../Header/Header';
 
@@ -14,6 +14,7 @@ const Login = ({ isValid, setIsValid, userData, setUserData }) => {
 	const handleInputChange = (e) => {
 		setUserData({ ...userData, [e.target.name]: e.target.value });
 	};
+	const navigate = useNavigate();
 
 	const submitUserData = async (e) => {
 		e.preventDefault();
@@ -35,8 +36,12 @@ const Login = ({ isValid, setIsValid, userData, setUserData }) => {
 
 			if (data.successful) {
 				localStorage.setItem('token', data.result);
-				setUserData({ userData });
-				window.location.href = '/courses';
+				setUserData({
+					name: data.user.name,
+					email: userData.email,
+					password: userData.password,
+				});
+				navigate('/courses');
 			} else {
 				console.error('Invalid data');
 			}
