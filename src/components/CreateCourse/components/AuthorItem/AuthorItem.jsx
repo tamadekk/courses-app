@@ -1,4 +1,7 @@
 import React from 'react';
+
+import PropType from 'prop-types';
+
 import styles from './AuthorItem.module.css';
 
 import plusIcon from '../../../../assets/icons/plusIcon.svg';
@@ -32,6 +35,12 @@ const AuthorItem = ({ authors, handleAddAuthor, onDeleteButtonClick }) => {
 			)}
 		</div>
 	);
+};
+
+AuthorItem.proptype = {
+	authors: PropType.arrayOf(PropType.number, PropType.string),
+	handleAddAuthor: PropType.func,
+	onDeleteButtonClick: PropType.func,
 };
 
 export default AuthorItem;

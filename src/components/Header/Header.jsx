@@ -1,4 +1,7 @@
 import React from 'react';
+
+import PropTypes from 'prop-types';
+
 import { Link, useLocation } from 'react-router-dom';
 
 import styles from './Header.module.css';
@@ -32,4 +35,7 @@ const Header = ({ userData }) => {
 	);
 };
 
+Header.propTypes = {
+	userData: PropTypes.object,
+};
 export default Header;

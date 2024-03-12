@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 
+import PropType from 'prop-types';
+
 import { Link } from 'react-router-dom';
 
 import EmptyCourseList from '../EmptyCourseList/EmptyCourseList';
@@ -68,6 +70,12 @@ const Courses = ({ courses, authors, isAuthenticated }) => {
 			/>
 		);
 	}
+};
+
+Courses.proptype = {
+	courses: PropType.arrayOf(PropType.number, PropType.string),
+	authors: PropType.arrayOf(PropType.number, PropType.string),
+	isAuthenticated: PropType.func,
 };
 
 export default Courses;

@@ -1,6 +1,11 @@
 import { useParams, Link } from 'react-router-dom';
-import Button from '../../common/Button/Button';
+
+import PropType from 'prop-types';
+
 import styles from './CourseInfo.module.css';
+
+import Button from '../../common/Button/Button';
+
 import formatDate from '../../helpers/formatDate';
 import formatDuration from '../../helpers/formatDuration';
 
@@ -49,6 +54,11 @@ const CourseInfo = ({ courses, authors }) => {
 			</div>
 		</div>
 	);
+};
+
+CourseInfo.proptype = {
+	courses: PropType.arrayOf(PropType.number, PropType.string),
+	authors: PropType.arrayOf(PropType.number, PropType.string),
 };
 
 export default CourseInfo;

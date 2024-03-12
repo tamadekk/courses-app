@@ -1,9 +1,16 @@
 import React, { useState } from 'react';
+
+import PropType from 'prop-types';
+
 import { Link } from 'react-router-dom';
-import Button from '../../../../common/Button/Button';
+
 import styles from './CourseCard.module.css';
+
+import Button from '../../../../common/Button/Button';
+
 import formatDate from '../../../../helpers/formatDate';
 import formatDuration from '../../../../helpers/formatDuration';
+
 import editButtonImage from '../../../../assets/icons/editButton.svg';
 import deleteButtonImage from '../../../../assets/icons/trashbinButton.svg';
 
@@ -73,4 +80,9 @@ const CourseCard = ({ courses, authors, isAuthenticated }) => {
 	);
 };
 
+CourseCard.proptype = {
+	courses: PropType.arrayOf(PropType.number, PropType.string),
+	authors: PropType.arrayOf(PropType.number, PropType.string),
+	isAuthenticated: PropType.bool,
+};
 export default CourseCard;

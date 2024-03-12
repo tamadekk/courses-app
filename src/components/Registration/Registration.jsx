@@ -1,5 +1,7 @@
 import React from 'react';
 
+import PropTypes from 'prop-types';
+
 import { Link } from 'react-router-dom';
 
 import Header from '../Header/Header';
@@ -96,4 +98,10 @@ const Registration = ({ isValid, setIsValid, userData, setUserData }) => {
 	);
 };
 
+Registration.propTypes = {
+	isValid: PropTypes.bool,
+	setIsValid: PropTypes.func,
+	userData: PropTypes.object,
+	setUserData: PropTypes.func,
+};
 export default Registration;

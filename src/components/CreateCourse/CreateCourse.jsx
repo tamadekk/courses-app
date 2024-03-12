@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
+
+import PropType from 'prop-types';
+
 import { v4 as uuidv4 } from 'uuid';
+
 import { useNavigate, Link } from 'react-router-dom';
 
 import styles from './CreateCourse.module.css';
@@ -212,4 +216,12 @@ const CreateCourse = ({
 	);
 };
 
+CreateCourse.proptype = {
+	setCourses: PropType.func,
+	authors: PropType.arrayOf(PropType.number, PropType.string),
+	setAuthors: PropType.func,
+	isValid: PropType.bool,
+	setIsValid: PropType.func,
+	userData: PropType.object,
+};
 export default CreateCourse;

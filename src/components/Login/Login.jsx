@@ -1,5 +1,7 @@
 import React from 'react';
 
+import PropTypes from 'prop-types';
+
 import { Link, useNavigate } from 'react-router-dom';
 
 import Header from '../Header/Header';
@@ -92,4 +94,10 @@ const Login = ({ isValid, setIsValid, userData, setUserData }) => {
 	);
 };
 
+Login.propTypes = {
+	isValid: PropTypes.bool,
+	setIsValid: PropTypes.func,
+	userData: PropTypes.object,
+	setUserData: PropTypes.func,
+};
 export default Login;
