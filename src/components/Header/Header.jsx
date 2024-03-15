@@ -1,6 +1,6 @@
 import React from 'react';
 
-import PropTypes from 'prop-types';
+import propTypes from 'prop-types';
 
 import { Link, useLocation } from 'react-router-dom';
 
@@ -36,6 +36,6 @@ const Header = ({ userData }) => {
 };
 
 Header.propTypes = {
-	userData: PropTypes.object,
+	userData: propTypes.object.isRequired,
 };
 export default Header;

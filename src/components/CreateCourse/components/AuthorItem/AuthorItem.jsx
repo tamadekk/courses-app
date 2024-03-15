@@ -1,6 +1,6 @@
 import React from 'react';
 
-import PropType from 'prop-types';
+import propTypes from 'prop-types';
 
 import styles from './AuthorItem.module.css';
 
@@ -37,10 +37,15 @@ const AuthorItem = ({ authors, handleAddAuthor, onDeleteButtonClick }) => {
 	);
 };
 
-AuthorItem.proptype = {
-	authors: PropType.arrayOf(PropType.number, PropType.string),
-	handleAddAuthor: PropType.func,
-	onDeleteButtonClick: PropType.func,
+AuthorItem.propTypes = {
+	authors: propTypes.arrayOf(
+		propTypes.shape({
+			id: propTypes.string.isRequired,
+			name: propTypes.string.isRequired,
+		}).isRequired
+	).isRequired,
+	handleAddAuthor: propTypes.func.isRequired,
+	onDeleteButtonClick: propTypes.func.isRequired,
 };
 
 export default AuthorItem;

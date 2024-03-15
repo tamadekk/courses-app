@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import PropType from 'prop-types';
+import propTypes from 'prop-types';
 
 import { v4 as uuidv4 } from 'uuid';
 
@@ -216,12 +216,17 @@ const CreateCourse = ({
 	);
 };
 
-CreateCourse.proptype = {
-	setCourses: PropType.func,
-	authors: PropType.arrayOf(PropType.number, PropType.string),
-	setAuthors: PropType.func,
-	isValid: PropType.bool,
-	setIsValid: PropType.func,
-	userData: PropType.object,
+CreateCourse.propTypes = {
+	setCourses: propTypes.func,
+	authors: propTypes.arrayOf(
+		propTypes.shape({
+			id: propTypes.string.isRequired,
+			name: propTypes.string.isRequired,
+		}).isRequired
+	).isRequired,
+	setAuthors: propTypes.func.isRequired,
+	isValid: propTypes.bool.isRequired,
+	setIsValid: propTypes.func.isRequired,
+	userData: propTypes.object.isRequired,
 };
 export default CreateCourse;

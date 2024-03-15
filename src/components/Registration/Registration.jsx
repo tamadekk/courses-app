@@ -1,6 +1,6 @@
 import React from 'react';
 
-import PropTypes from 'prop-types';
+import propTypes from 'prop-types';
 
 import { Link } from 'react-router-dom';
 
@@ -99,9 +99,9 @@ const Registration = ({ isValid, setIsValid, userData, setUserData }) => {
 };
 
 Registration.propTypes = {
-	isValid: PropTypes.bool,
-	setIsValid: PropTypes.func,
-	userData: PropTypes.object,
-	setUserData: PropTypes.func,
+	isValid: propTypes.bool.isRequired,
+	setIsValid: propTypes.func.isRequired,
+	userData: propTypes.object.isRequired,
+	setUserData: propTypes.func.isRequired,
 };
 export default Registration;

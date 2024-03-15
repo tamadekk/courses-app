@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import PropType from 'prop-types';
+import propTypes from 'prop-types';
 
 import { Link } from 'react-router-dom';
 
@@ -72,10 +72,24 @@ const Courses = ({ courses, authors, isAuthenticated }) => {
 	}
 };
 
-Courses.proptype = {
-	courses: PropType.arrayOf(PropType.number, PropType.string),
-	authors: PropType.arrayOf(PropType.number, PropType.string),
-	isAuthenticated: PropType.func,
+Courses.propTypes = {
+	courses: propTypes.arrayOf(
+		propTypes.shape({
+			id: propTypes.string.isRequired,
+			title: propTypes.string.isRequired,
+			description: propTypes.string.isRequired,
+			creationDate: propTypes.string.isRequired,
+			duration: propTypes.number.isRequired,
+			authors: propTypes.arrayOf(propTypes.string.isRequired).isRequired,
+		}).isRequired
+	),
+	authors: propTypes.arrayOf(
+		propTypes.shape({
+			id: propTypes.string.isRequired,
+			name: propTypes.string.isRequired,
+		}).isRequired
+	).isRequired,
+	isAuthenticated: propTypes.bool.isRequired,
 };
 
 export default Courses;

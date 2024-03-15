@@ -1,6 +1,6 @@
 import { useParams, Link } from 'react-router-dom';
 
-import PropType from 'prop-types';
+import propTypes from 'prop-types';
 
 import styles from './CourseInfo.module.css';
 
@@ -56,9 +56,23 @@ const CourseInfo = ({ courses, authors }) => {
 	);
 };
 
-CourseInfo.proptype = {
-	courses: PropType.arrayOf(PropType.number, PropType.string),
-	authors: PropType.arrayOf(PropType.number, PropType.string),
+CourseInfo.propTypes = {
+	courses: propTypes.arrayOf(
+		propTypes.shape({
+			id: propTypes.string.isRequired,
+			title: propTypes.string.isRequired,
+			description: propTypes.string.isRequired,
+			creationDate: propTypes.string.isRequired,
+			duration: propTypes.number.isRequired,
+			authors: propTypes.arrayOf(propTypes.string.isRequired).isRequired,
+		}).isRequired
+	),
+	authors: propTypes.arrayOf(
+		propTypes.shape({
+			id: propTypes.string.isRequired,
+			name: propTypes.string.isRequired,
+		}).isRequired
+	).isRequired,
 };
 
 export default CourseInfo;
