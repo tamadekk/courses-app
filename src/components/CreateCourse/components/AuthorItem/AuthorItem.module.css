@@ -1,0 +1,9 @@
+.container{
+    display: flex;
+    gap: 10px;
+}
+
+.emptyList{
+    display: flex;
+    justify-content: center;
+}

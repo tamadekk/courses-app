@@ -1,0 +1,50 @@
+.container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  height: 100%;
+  position: relative;
+}
+
+.container >  h1 {
+  padding-right: 1100px;
+}
+
+.card {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between; 
+  align-items: flex-start;
+  gap: 15px;
+  box-sizing: border-box;
+  width: 65vw;
+  background-color: #ffffff;
+  border-radius: 5px;
+  border: 1px solid #3333333d;
+  margin: 0 15px 50px 15px;
+  padding: 15px;
+  position: relative;
+}
+
+.card>div {
+  box-sizing: content-box;
+  width: calc(50% - 15px);
+  padding-left: 15px;
+  color: #333333;
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  font-size: 16px;
+
+  line-height: 1.5625;
+  margin: 0 auto 15px;
+}
+
+.buttonContainer {
+  position: absolute;
+  right: -450px;
+  bottom: -100px;
+}
+
+.div_hr{
+  border-left: 1px solid #4949493d;
+  border-width: 1.5px;
+}

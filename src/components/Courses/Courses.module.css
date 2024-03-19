@@ -1,0 +1,10 @@
+.container{
+    display: grid;
+    place-items: center;
+    margin-top: 25px;
+}
+
+.SeachBarRow{
+    display: flex;
+    justify-content: space-between;
+}
