@@ -1,5 +1,8 @@
-import styles from './Input.module.css';
+import propTypes from 'prop-types';
+
 import { useState } from 'react';
+
+import styles from './Input.module.css';
 
 const Input = ({ onChange, isRequired, type, name, isValid = true }) => {
 	const [, setValue] = useState('');
@@ -27,6 +30,14 @@ const Input = ({ onChange, isRequired, type, name, isValid = true }) => {
 			)}
 		</div>
 	);
+};
+
+Input.propTypes = {
+	onChange: propTypes.func.isRequired,
+	isRequired: propTypes.bool,
+	type: propTypes.string.isRequired,
+	name: propTypes.string.isRequired,
+	isValid: propTypes.bool,
 };
 
 export default Input;

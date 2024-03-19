@@ -47,7 +47,7 @@ const CourseInfo = ({ courses, authors }) => {
 					</div>
 					<div className={styles.buttonContainer}>
 						<Link to='/courses/'>
-							<Button buttonText='Back' category='text' />
+							<Button buttonText='Back' type='text' />
 						</Link>
 					</div>
 				</div>

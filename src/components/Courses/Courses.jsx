@@ -50,7 +50,7 @@ const Courses = ({ courses, authors, isAuthenticated }) => {
 							buttonHandler={searchHandlerButton}
 						/>
 						<Link to='/courses/add'>
-							<Button buttonText='Add new course' category='text' />
+							<Button buttonText='Add new course' type='text' />
 						</Link>
 					</div>
 

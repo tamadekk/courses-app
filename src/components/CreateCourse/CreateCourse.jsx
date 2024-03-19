@@ -199,13 +199,18 @@ const CreateCourse = ({
 								<h1>Course Authors</h1>
 								<AuthorItem
 									authors={courseAuthorsList}
+									handleAddAuthor={handleAddAuthor}
 									onDeleteButtonClick={handleDeleteAuthor}
 								/>
 							</div>
 						</div>
 					</form>
 					<div className={styles.ButtonRow}>
-						<Button buttonText='create course' onClick={submitCourse} />
+						<Button
+							buttonText='create course'
+							onClick={submitCourse}
+							type='button'
+						/>
 						<Link to='/courses/'>
 							<Button type='submit' buttonText='cancel' />
 						</Link>
@@ -227,6 +232,10 @@ CreateCourse.propTypes = {
 	setAuthors: propTypes.func.isRequired,
 	isValid: propTypes.bool.isRequired,
 	setIsValid: propTypes.func.isRequired,
-	userData: propTypes.object.isRequired,
+	userData: propTypes.shape({
+		name: propTypes.string.isRequired,
+		email: propTypes.string.isRequired,
+		password: propTypes.string.isRequired,
+	}).isRequired,
 };
 export default CreateCourse;

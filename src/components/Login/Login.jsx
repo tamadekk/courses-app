@@ -80,7 +80,7 @@ const Login = ({ isValid, setIsValid, userData, setUserData }) => {
 								isValid={isValid}
 							/>
 						</label>
-						<Button buttonText='Login' onClick={submitUserData} />
+						<Button buttonText='Login' onClick={submitUserData} type='button' />
 						<p>If you don't have an account you may</p>
 						<b>
 							<Link to='/registration' className={styles.Link}>
@@ -97,7 +97,11 @@ const Login = ({ isValid, setIsValid, userData, setUserData }) => {
 Login.propTypes = {
 	isValid: propTypes.bool.isRequired,
 	setIsValid: propTypes.func.isRequired,
-	userData: propTypes.object.isRequired,
+	userData: propTypes.shape({
+		name: propTypes.string.isRequired,
+		email: propTypes.string.isRequired,
+		password: propTypes.string.isRequired,
+	}).isRequired,
 	setUserData: propTypes.func.isRequired,
 };
 export default Login;

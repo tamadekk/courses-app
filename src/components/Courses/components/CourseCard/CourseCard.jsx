@@ -51,10 +51,11 @@ const CourseCard = ({ courses, authors, isAuthenticated }) => {
 										<Button
 											onClick={toggleVisibility}
 											buttonText='Show Course'
+											type='text'
 										/>
 									</Link>
-									<Button icon={editButtonImage} />
-									<Button icon={deleteButtonImage} />
+									<Button icon={editButtonImage} type='image' />
+									<Button icon={deleteButtonImage} type='image' />
 								</div>
 							)}
 							{!isAuthenticated && (
@@ -68,6 +69,7 @@ const CourseCard = ({ courses, authors, isAuthenticated }) => {
 										<Button
 											onClick={toggleVisibility}
 											buttonText='Show Course'
+											type='text'
 										/>
 									</Link>
 								</div>

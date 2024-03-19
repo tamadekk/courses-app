@@ -26,7 +26,7 @@ const Header = ({ userData }) => {
 				{!['/login', '/registration'].includes(location.pathname) && (
 					<Button
 						buttonText={getIsLoggedIn() ? 'Logout' : 'Login'}
-						category='text'
+						type='text'
 						onClick={getIsLoggedIn() ? handleLogout : () => {}}
 					/>
 				)}
@@ -36,6 +36,10 @@ const Header = ({ userData }) => {
 };
 
 Header.propTypes = {
-	userData: propTypes.object.isRequired,
+	userData: propTypes.shape({
+		name: propTypes.string.isRequired,
+		email: propTypes.string.isRequired,
+		password: propTypes.string.isRequired,
+	}).isRequired,
 };
 export default Header;

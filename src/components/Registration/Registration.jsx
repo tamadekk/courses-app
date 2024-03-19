@@ -82,7 +82,11 @@ const Registration = ({ isValid, setIsValid, userData, setUserData }) => {
 								isValid={isValid}
 							/>
 						</label>
-						<Button onClick={submitUserData} buttonText='Registration' />
+						<Button
+							onClick={submitUserData}
+							buttonText='Registration'
+							type='button'
+						/>
 						<p>
 							If you have an account you may{' '}
 							<b>
@@ -101,7 +105,11 @@ const Registration = ({ isValid, setIsValid, userData, setUserData }) => {
 Registration.propTypes = {
 	isValid: propTypes.bool.isRequired,
 	setIsValid: propTypes.func.isRequired,
-	userData: propTypes.object.isRequired,
+	userData: propTypes.shape({
+		name: propTypes.string.isRequired,
+		email: propTypes.string.isRequired,
+		password: propTypes.string.isRequired,
+	}).isRequired,
 	setUserData: propTypes.func.isRequired,
 };
 export default Registration;
