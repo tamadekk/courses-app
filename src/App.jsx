@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Routes, Route, Outlet, useNavigate } from 'react-router-dom';
-import { mockedCoursesList, mockedAuthorsList } from './constants';
+
+import { fetchCoursesData, fetchAuthorsData } from './services.js';
 
 import Courses from './components/Courses/Courses';
 import Header from './components/Header/Header';
@@ -21,10 +22,22 @@ const App = () => {
 	const [isValid, setIsValid] = useState(true);
 
 	const navigate = useNavigate();
-
 	useEffect(() => {
-		setCourses(mockedCoursesList);
-		setAuthors(mockedAuthorsList);
+		fetchCoursesData()
+			.then((data) => {
+				setCourses(data);
+			})
+			.catch((error) => {
+				console.error('Error fetching dfasfdasdf:', error);
+			});
+
+		fetchAuthorsData()
+			.then((data) => {
+				setAuthors(data);
+			})
+			.catch((error) => {
+				console.error('Error fetching authors:', error);
+			});
 	}, []);
 
 	useEffect(() => {
