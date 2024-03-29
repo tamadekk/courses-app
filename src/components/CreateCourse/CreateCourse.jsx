@@ -223,7 +223,7 @@ const CreateCourse = ({
 
 CreateCourse.propTypes = {
 	setCourses: propTypes.func,
-	authors: propTypes.objectOf(
+	authors: propTypes.arrayOf(
 		propTypes.shape({
 			id: propTypes.string.isRequired,
 			name: propTypes.string.isRequired,
@@ -232,10 +232,11 @@ CreateCourse.propTypes = {
 	setAuthors: propTypes.func.isRequired,
 	isValid: propTypes.bool.isRequired,
 	setIsValid: propTypes.func.isRequired,
-	userData: propTypes.objectOf({
+	userData: propTypes.shape({
 		name: propTypes.string.isRequired,
 		email: propTypes.string.isRequired,
 		password: propTypes.string.isRequired,
 	}).isRequired,
 };
+
 export default CreateCourse;

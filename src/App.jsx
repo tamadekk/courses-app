@@ -25,15 +25,15 @@ const App = () => {
 	useEffect(() => {
 		fetchCoursesData()
 			.then((data) => {
-				setCourses(data);
+				setCourses(data.result);
 			})
 			.catch((error) => {
-				console.error('Error fetching dfasfdasdf:', error);
+				console.error('Error fetching courses:', error);
 			});
 
 		fetchAuthorsData()
 			.then((data) => {
-				setAuthors(data);
+				setAuthors(data.result);
 			})
 			.catch((error) => {
 				console.error('Error fetching authors:', error);

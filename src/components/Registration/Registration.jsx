@@ -112,4 +112,5 @@ Registration.propTypes = {
 	}).isRequired,
 	setUserData: propTypes.func.isRequired,
 };
+
 export default Registration;

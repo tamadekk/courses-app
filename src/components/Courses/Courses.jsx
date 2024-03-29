@@ -31,7 +31,6 @@ const Courses = ({ courses, authors, isAuthenticated }) => {
 		const courseFiltered = getFilteredCourse(courses, lowercasedData);
 		setFilteredCourses(courseFiltered);
 	};
-	console.log(courses);
 
 	const authorAttributes = [
 		'id',

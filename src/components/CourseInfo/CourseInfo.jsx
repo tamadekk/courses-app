@@ -11,6 +11,7 @@ import formatDuration from '../../helpers/formatDuration';
 
 const CourseInfo = ({ courses, authors }) => {
 	const { courseId } = useParams();
+	console.log(courses.result);
 	const item = courses.find((item) => item.id === courseId);
 	const getAuthorsFiltered = (authors) => {
 		return authors
