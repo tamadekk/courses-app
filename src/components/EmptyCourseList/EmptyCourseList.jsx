@@ -1,3 +1,5 @@
+import propTypes from 'prop-types';
+
 import styles from './EmptyCourseList.module.css';
 import Button from '../../common/Button/Button';
 
@@ -10,5 +12,8 @@ const EmptyCourseList = ({ tittle, message }) => {
 		</div>
 	);
 };
-
+EmptyCourseList.propTypes = {
+	tittle: propTypes.string.isRequired,
+	message: propTypes.string.isRequired,
+};
 export default EmptyCourseList;

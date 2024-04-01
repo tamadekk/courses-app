@@ -21,7 +21,6 @@
 .iconButton {
   height: 50px;
   background-color: #007298;
-  border-color: #007298;
   border-radius: 8px;
   cursor: pointer;
 }
@@ -29,5 +28,4 @@
 .img {
   height: 45px;
   width: 50px;
-
 }

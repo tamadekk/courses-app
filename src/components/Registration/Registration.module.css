@@ -1,0 +1,25 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+
+}
+
+
+.formContainer form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap:15px;
+    width: 25vw;
+    padding: 40px;
+    background-color: #ffffff;
+    border-radius: 5px;
+    border: 1px solid #3333333d;
+}
+
+.Link{
+    text-decoration: none;
+    color:black;
+}

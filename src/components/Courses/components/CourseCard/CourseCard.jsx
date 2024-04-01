@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
 
-import Button from '../../../../common/Button/Button';
+import propTypes from 'prop-types';
+
+import { Link } from 'react-router-dom';
 
 import styles from './CourseCard.module.css';
+
+import Button from '../../../../common/Button/Button';
 
 import formatDate from '../../../../helpers/formatDate';
 import formatDuration from '../../../../helpers/formatDuration';
@@ -10,12 +14,15 @@ import formatDuration from '../../../../helpers/formatDuration';
 import editButtonImage from '../../../../assets/icons/editButton.svg';
 import deleteButtonImage from '../../../../assets/icons/trashbinButton.svg';
 
-const CourseCard = ({ course, author, showCourseInfo, isAuthenticated }) => {
+const CourseCard = ({ courses, authors, isAuthenticated }) => {
 	const [isToggled, setIsToggled] = useState(false);
+	const toggleVisibility = () => {
+		setIsToggled(!isToggled);
+	};
 
 	return (
 		<div>
-			{course.map((item) => (
+			{courses.map((item) => (
 				<div className={styles.wrapper} key={item.id}>
 					<div className={styles.firstsection}>
 						<h1>{item.title}</h1>
@@ -26,7 +33,7 @@ const CourseCard = ({ course, author, showCourseInfo, isAuthenticated }) => {
 							<p>
 								<b>Authors: </b>
 								<span>
-									{author
+									{authors
 										.filter((el) => item.authors.includes(el.id))
 										.map((el) => el.name)
 										.join(',')}
@@ -38,32 +45,35 @@ const CourseCard = ({ course, author, showCourseInfo, isAuthenticated }) => {
 							<p>
 								<b>Created:</b> <span>{formatDate(item.creationDate)}</span>
 							</p>
-							{isAuthenticated ? (
+							{isAuthenticated && (
 								<div className={styles.buttons}>
-									<Button
-										onClick={() => {
-											setIsToggled(!isToggled);
-											showCourseInfo(false, item.id);
-										}}
-										buttonText='Show Course'
-										category='text'
-									/>
-									<Button icon={editButtonImage} />
-									<Button icon={deleteButtonImage} />
-								</div>
-							) : (
-								<div className={styles.buttons}>
-									<Button
-										onClick={() => {
-											setIsToggled(!isToggled);
-											showCourseInfo(false, item.id);
-										}}
-										buttonText='Show Course'
-									/>
+									<Link to={`/courses/${item.id}`}>
+										<Button
+											onClick={toggleVisibility}
+											buttonText='Show Course'
+											type='text'
+										/>
+									</Link>
+									<Button icon={editButtonImage} type='image' />
+									<Button icon={deleteButtonImage} type='image' />
 								</div>
 							)}
-
-							{isToggled && showCourseInfo(false, item.id)}
+							{!isAuthenticated && (
+								<div className={styles.buttons}>
+									<Link
+										to={{
+											pathname: `/courses/${item.id}`,
+											courses,
+										}}
+									>
+										<Button
+											onClick={toggleVisibility}
+											buttonText='Show Course'
+											type='text'
+										/>
+									</Link>
+								</div>
+							)}
 						</div>
 					</div>
 				</div>
@@ -72,4 +82,23 @@ const CourseCard = ({ course, author, showCourseInfo, isAuthenticated }) => {
 	);
 };
 
+CourseCard.propTypes = {
+	courses: propTypes.arrayOf(
+		propTypes.shape({
+			id: propTypes.string.isRequired,
+			title: propTypes.string.isRequired,
+			description: propTypes.string.isRequired,
+			creationDate: propTypes.string.isRequired,
+			duration: propTypes.number.isRequired,
+			authors: propTypes.arrayOf(propTypes.string.isRequired).isRequired,
+		}).isRequired
+	),
+	authors: propTypes.arrayOf(
+		propTypes.shape({
+			id: propTypes.string.isRequired,
+			name: propTypes.string.isRequired,
+		}).isRequired
+	).isRequired,
+	isAuthenticated: propTypes.bool.isRequired,
+};
 export default CourseCard;

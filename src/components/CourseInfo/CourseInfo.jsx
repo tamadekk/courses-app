@@ -1,13 +1,17 @@
-import Button from '../../common/Button/Button';
+import { useParams, Link } from 'react-router-dom';
+
+import propTypes from 'prop-types';
 
 import styles from './CourseInfo.module.css';
+
+import Button from '../../common/Button/Button';
 
 import formatDate from '../../helpers/formatDate';
 import formatDuration from '../../helpers/formatDuration';
 
-const CourseInfo = ({ course, author, showCourseInfo, selectedCourseID }) => {
-	const item = course.find((item) => item.id === selectedCourseID);
-
+const CourseInfo = ({ courses, authors }) => {
+	const { courseId } = useParams();
+	const item = courses.find((item) => item.id === courseId);
 	const getAuthorsFiltered = (authors) => {
 		return authors
 			.filter((el) => item.authors.includes(el.id))
@@ -38,21 +42,37 @@ const CourseInfo = ({ course, author, showCourseInfo, selectedCourseID }) => {
 						</p>
 						<p>
 							<b>Authors:</b>
-							<span>{getAuthorsFiltered(author)}</span>
+							<span>{getAuthorsFiltered(authors)}</span>
 						</p>
 					</div>
 					<div className={styles.buttonContainer}>
-						<Button
-							onClick={() => {
-								showCourseInfo(true);
-							}}
-							buttonText='Back'
-							category='text'
-						/>
+						<Link to='/courses/'>
+							<Button buttonText='Back' type='text' />
+						</Link>
 					</div>
 				</div>
 			</div>
 		</div>
 	);
 };
+
+CourseInfo.propTypes = {
+	courses: propTypes.arrayOf(
+		propTypes.shape({
+			id: propTypes.string.isRequired,
+			title: propTypes.string.isRequired,
+			description: propTypes.string.isRequired,
+			creationDate: propTypes.string.isRequired,
+			duration: propTypes.number.isRequired,
+			authors: propTypes.arrayOf(propTypes.string.isRequired).isRequired,
+		}).isRequired
+	),
+	authors: propTypes.arrayOf(
+		propTypes.shape({
+			id: propTypes.string.isRequired,
+			name: propTypes.string.isRequired,
+		}).isRequired
+	).isRequired,
+};
+
 export default CourseInfo;

@@ -1,0 +1,303 @@
+From 703bcd97e275c7805aaf591a02f3ba3ecadd2481 Mon Sep 17 00:00:00 2001
+From: tamadekk <186jnd@gmail.com>
+Date: Fri, 15 Mar 2024 13:46:07 +0100
+Subject: [PATCH] fixed PropType
+
+---
+ src/components/CourseInfo/CourseInfo.jsx      | 22 +++++++++++++----
+ src/components/Courses/Courses.jsx            | 24 +++++++++++++++----
+ .../components/CourseCard/CourseCard.jsx      | 24 +++++++++++++++----
+ src/components/CreateCourse/CreateCourse.jsx  | 21 +++++++++-------
+ .../components/AuthorItem/AuthorItem.jsx      | 15 ++++++++----
+ .../EmptyCourseList/EmptyCourseList.jsx       |  8 +++----
+ src/components/Header/Header.jsx              |  4 ++--
+ src/components/Login/Login.jsx                | 10 ++++----
+ src/components/Registration/Registration.jsx  | 10 ++++----
+ 9 files changed, 95 insertions(+), 43 deletions(-)
+
+diff --git a/src/components/CourseInfo/CourseInfo.jsx b/src/components/CourseInfo/CourseInfo.jsx
+index 3a7782b..d832f3b 100644
+--- a/src/components/CourseInfo/CourseInfo.jsx
++++ b/src/components/CourseInfo/CourseInfo.jsx
+@@ -1,6 +1,6 @@
+ import { useParams, Link } from 'react-router-dom';
+ 
+-import PropType from 'prop-types';
++import propTypes from 'prop-types';
+ 
+ import styles from './CourseInfo.module.css';
+ 
+@@ -56,9 +56,23 @@ const CourseInfo = ({ courses, authors }) => {
+ 	);
+ };
+ 
+-CourseInfo.proptype = {
+-	courses: PropType.arrayOf(PropType.number, PropType.string),
+-	authors: PropType.arrayOf(PropType.number, PropType.string),
++CourseInfo.propTypes = {
++	courses: propTypes.arrayOf(
++		propTypes.shape({
++			id: propTypes.string.isRequired,
++			title: propTypes.string.isRequired,
++			description: propTypes.string.isRequired,
++			creationDate: propTypes.string.isRequired,
++			duration: propTypes.number.isRequired,
++			authors: propTypes.arrayOf(propTypes.string.isRequired).isRequired,
++		}).isRequired
++	),
++	authors: propTypes.arrayOf(
++		propTypes.shape({
++			id: propTypes.string.isRequired,
++			name: propTypes.string.isRequired,
++		}).isRequired
++	).isRequired,
+ };
+ 
+ export default CourseInfo;
+diff --git a/src/components/Courses/Courses.jsx b/src/components/Courses/Courses.jsx
+index a61cf1b..399a049 100644
+--- a/src/components/Courses/Courses.jsx
++++ b/src/components/Courses/Courses.jsx
+@@ -1,6 +1,6 @@
+ import React, { useState } from 'react';
+ 
+-import PropType from 'prop-types';
++import propTypes from 'prop-types';
+ 
+ import { Link } from 'react-router-dom';
+ 
+@@ -72,10 +72,24 @@ const Courses = ({ courses, authors, isAuthenticated }) => {
+ 	}
+ };
+ 
+-Courses.proptype = {
+-	courses: PropType.arrayOf(PropType.number, PropType.string),
+-	authors: PropType.arrayOf(PropType.number, PropType.string),
+-	isAuthenticated: PropType.func,
++Courses.propTypes = {
++	courses: propTypes.arrayOf(
++		propTypes.shape({
++			id: propTypes.string.isRequired,
++			title: propTypes.string.isRequired,
++			description: propTypes.string.isRequired,
++			creationDate: propTypes.string.isRequired,
++			duration: propTypes.number.isRequired,
++			authors: propTypes.arrayOf(propTypes.string.isRequired).isRequired,
++		}).isRequired
++	),
++	authors: propTypes.arrayOf(
++		propTypes.shape({
++			id: propTypes.string.isRequired,
++			name: propTypes.string.isRequired,
++		}).isRequired
++	).isRequired,
++	isAuthenticated: propTypes.bool.isRequired,
+ };
+ 
+ export default Courses;
+diff --git a/src/components/Courses/components/CourseCard/CourseCard.jsx b/src/components/Courses/components/CourseCard/CourseCard.jsx
+index dd7f8f1..de1d956 100644
+--- a/src/components/Courses/components/CourseCard/CourseCard.jsx
++++ b/src/components/Courses/components/CourseCard/CourseCard.jsx
+@@ -1,6 +1,6 @@
+ import React, { useState } from 'react';
+ 
+-import PropType from 'prop-types';
++import propTypes from 'prop-types';
+ 
+ import { Link } from 'react-router-dom';
+ 
+@@ -80,9 +80,23 @@ const CourseCard = ({ courses, authors, isAuthenticated }) => {
+ 	);
+ };
+ 
+-CourseCard.proptype = {
+-	courses: PropType.arrayOf(PropType.number, PropType.string),
+-	authors: PropType.arrayOf(PropType.number, PropType.string),
+-	isAuthenticated: PropType.bool,
++CourseCard.propTypes = {
++	courses: propTypes.arrayOf(
++		propTypes.shape({
++			id: propTypes.string.isRequired,
++			title: propTypes.string.isRequired,
++			description: propTypes.string.isRequired,
++			creationDate: propTypes.string.isRequired,
++			duration: propTypes.number.isRequired,
++			authors: propTypes.arrayOf(propTypes.string.isRequired).isRequired,
++		}).isRequired
++	),
++	authors: propTypes.arrayOf(
++		propTypes.shape({
++			id: propTypes.string.isRequired,
++			name: propTypes.string.isRequired,
++		}).isRequired
++	).isRequired,
++	isAuthenticated: propTypes.bool.isRequired,
+ };
+ export default CourseCard;
+diff --git a/src/components/CreateCourse/CreateCourse.jsx b/src/components/CreateCourse/CreateCourse.jsx
+index ba008e2..b28a083 100644
+--- a/src/components/CreateCourse/CreateCourse.jsx
++++ b/src/components/CreateCourse/CreateCourse.jsx
+@@ -1,6 +1,6 @@
+ import React, { useState } from 'react';
+ 
+-import PropType from 'prop-types';
++import propTypes from 'prop-types';
+ 
+ import { v4 as uuidv4 } from 'uuid';
+ 
+@@ -216,12 +216,17 @@ const CreateCourse = ({
+ 	);
+ };
+ 
+-CreateCourse.proptype = {
+-	setCourses: PropType.func,
+-	authors: PropType.arrayOf(PropType.number, PropType.string),
+-	setAuthors: PropType.func,
+-	isValid: PropType.bool,
+-	setIsValid: PropType.func,
+-	userData: PropType.object,
++CreateCourse.propTypes = {
++	setCourses: propTypes.func,
++	authors: propTypes.arrayOf(
++		propTypes.shape({
++			id: propTypes.string.isRequired,
++			name: propTypes.string.isRequired,
++		}).isRequired
++	).isRequired,
++	setAuthors: propTypes.func.isRequired,
++	isValid: propTypes.bool.isRequired,
++	setIsValid: propTypes.func.isRequired,
++	userData: propTypes.object.isRequired,
+ };
+ export default CreateCourse;
+diff --git a/src/components/CreateCourse/components/AuthorItem/AuthorItem.jsx b/src/components/CreateCourse/components/AuthorItem/AuthorItem.jsx
+index cc54d04..6abd8b7 100644
+--- a/src/components/CreateCourse/components/AuthorItem/AuthorItem.jsx
++++ b/src/components/CreateCourse/components/AuthorItem/AuthorItem.jsx
+@@ -1,6 +1,6 @@
+ import React from 'react';
+ 
+-import PropType from 'prop-types';
++import propTypes from 'prop-types';
+ 
+ import styles from './AuthorItem.module.css';
+ 
+@@ -37,10 +37,15 @@ const AuthorItem = ({ authors, handleAddAuthor, onDeleteButtonClick }) => {
+ 	);
+ };
+ 
+-AuthorItem.proptype = {
+-	authors: PropType.arrayOf(PropType.number, PropType.string),
+-	handleAddAuthor: PropType.func,
+-	onDeleteButtonClick: PropType.func,
++AuthorItem.propTypes = {
++	authors: propTypes.arrayOf(
++		propTypes.shape({
++			id: propTypes.string.isRequired,
++			name: propTypes.string.isRequired,
++		}).isRequired
++	).isRequired,
++	handleAddAuthor: propTypes.func.isRequired,
++	onDeleteButtonClick: propTypes.func.isRequired,
+ };
+ 
+ export default AuthorItem;
+diff --git a/src/components/EmptyCourseList/EmptyCourseList.jsx b/src/components/EmptyCourseList/EmptyCourseList.jsx
+index 2e4bd19..f5442dd 100644
+--- a/src/components/EmptyCourseList/EmptyCourseList.jsx
++++ b/src/components/EmptyCourseList/EmptyCourseList.jsx
+@@ -1,4 +1,4 @@
+-import PropType from 'prop-types';
++import propTypes from 'prop-types';
+ 
+ import styles from './EmptyCourseList.module.css';
+ import Button from '../../common/Button/Button';
+@@ -12,8 +12,8 @@ const EmptyCourseList = ({ tittle, message }) => {
+ 		</div>
+ 	);
+ };
+-EmptyCourseList.propType = {
+-	tittle: PropType.string,
+-	message: PropType.string,
++EmptyCourseList.propTypes = {
++	tittle: propTypes.string.isRequired,
++	message: propTypes.string.isRequired,
+ };
+ export default EmptyCourseList;
+diff --git a/src/components/Header/Header.jsx b/src/components/Header/Header.jsx
+index 056e1cf..646ae5b 100644
+--- a/src/components/Header/Header.jsx
++++ b/src/components/Header/Header.jsx
+@@ -1,6 +1,6 @@
+ import React from 'react';
+ 
+-import PropTypes from 'prop-types';
++import propTypes from 'prop-types';
+ 
+ import { Link, useLocation } from 'react-router-dom';
+ 
+@@ -36,6 +36,6 @@ const Header = ({ userData }) => {
+ };
+ 
+ Header.propTypes = {
+-	userData: PropTypes.object,
++	userData: propTypes.object.isRequired,
+ };
+ export default Header;
+diff --git a/src/components/Login/Login.jsx b/src/components/Login/Login.jsx
+index dda5711..893a5c0 100644
+--- a/src/components/Login/Login.jsx
++++ b/src/components/Login/Login.jsx
+@@ -1,6 +1,6 @@
+ import React from 'react';
+ 
+-import PropTypes from 'prop-types';
++import propTypes from 'prop-types';
+ 
+ import { Link, useNavigate } from 'react-router-dom';
+ 
+@@ -95,9 +95,9 @@ const Login = ({ isValid, setIsValid, userData, setUserData }) => {
+ };
+ 
+ Login.propTypes = {
+-	isValid: PropTypes.bool,
+-	setIsValid: PropTypes.func,
+-	userData: PropTypes.object,
+-	setUserData: PropTypes.func,
++	isValid: propTypes.bool.isRequired,
++	setIsValid: propTypes.func.isRequired,
++	userData: propTypes.object.isRequired,
++	setUserData: propTypes.func.isRequired,
+ };
+ export default Login;
+diff --git a/src/components/Registration/Registration.jsx b/src/components/Registration/Registration.jsx
+index 7bdd3bf..504deaa 100644
+--- a/src/components/Registration/Registration.jsx
++++ b/src/components/Registration/Registration.jsx
+@@ -1,6 +1,6 @@
+ import React from 'react';
+ 
+-import PropTypes from 'prop-types';
++import propTypes from 'prop-types';
+ 
+ import { Link } from 'react-router-dom';
+ 
+@@ -99,9 +99,9 @@ const Registration = ({ isValid, setIsValid, userData, setUserData }) => {
+ };
+ 
+ Registration.propTypes = {
+-	isValid: PropTypes.bool,
+-	setIsValid: PropTypes.func,
+-	userData: PropTypes.object,
+-	setUserData: PropTypes.func,
++	isValid: propTypes.bool.isRequired,
++	setIsValid: propTypes.func.isRequired,
++	userData: propTypes.object.isRequired,
++	setUserData: propTypes.func.isRequired,
+ };
+ export default Registration;
+-- 
+2.40.1.windows.1
+

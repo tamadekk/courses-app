@@ -1,11 +1,38 @@
-.searchbar{
+.validinput{
     margin-right: 15px;
     width: 400px;
     padding: 15px;
     margin-bottom: 8px;
-    border: none;
+    border: 1px solid;
+    border-color: #CFCFCF;
     border-radius: 5px;
     font-size: 16px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     outline: none;
+}
+
+.invalidinput{
+    display: flex;
+    margin-right: 15px;
+    width: 400px;
+    padding: 15px;
+    margin-bottom: 8px;
+    border: 1px solid;
+    border-color: #FF0000;
+    border-radius: 5px;
+    font-size: 16px;
+    outline: none;
+}
+
+.errorMessage{
+    display: inline;
+    color: red;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+input[type="number"] {
+    -moz-appearance: textfield;
 }
