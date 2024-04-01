@@ -1,0 +1,30 @@
+.wrapper {
+  display: flex;
+  flex-direction: row;
+  width: 75vw;
+  background-color: #ffffff;
+  border-radius: 8px;
+  border-left: 10px solid;
+  box-shadow: 1px 1px 5px 3px rgba(50, 53, 54, 0.336);
+  margin: 0 15px 50px 15px;
+  padding: 5px;
+}
+
+.firstsection {
+  flex: 2;
+  padding: 20px;
+}
+
+.secondsection {
+  flex: 1;
+  padding: 15px;
+  line-height: 5px;
+
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 55px;
+}
