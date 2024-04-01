@@ -1,15 +1,16 @@
 import React from 'react';
-
-import propTypes from 'prop-types';
-
 import { Link, useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+
+import { getUser } from '../../store/selector';
 
 import styles from './Header.module.css';
 
 import Logo from './components/Logo/Logo';
 import Button from './../../common/Button/Button';
 
-const Header = ({ userData }) => {
+const Header = () => {
+	const userData = useSelector(getUser);
 	const location = useLocation();
 	const handleLogout = () => {
 		localStorage.removeItem('token');
@@ -35,11 +36,4 @@ const Header = ({ userData }) => {
 	);
 };
 
-Header.propTypes = {
-	userData: propTypes.shape({
-		name: propTypes.string.isRequired,
-		email: propTypes.string.isRequired,
-		password: propTypes.string.isRequired,
-	}).isRequired,
-};
 export default Header;

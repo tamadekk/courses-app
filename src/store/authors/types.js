@@ -1,1 +1,1 @@
-export const FETCH_AUTHORS = 'FETCH_AUTHORS';
+export const ADD_AUTHORS = 'ADD_AUTHORS';

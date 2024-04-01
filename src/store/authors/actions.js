@@ -1,6 +1,3 @@
-import { FETCH_AUTHORS } from './types';
+import { ADD_AUTHORS } from './types';
 
-export const fetchAuthorsSuccess = (authors) => ({
-	type: FETCH_AUTHORS,
-	payload: authors,
-});
+export const addAuthorAction = (payload) => ({ type: ADD_AUTHORS, payload });

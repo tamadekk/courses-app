@@ -1,4 +1,4 @@
-import { FETCH_AUTHORS } from './types';
+import { ADD_AUTHORS } from './types';
 
 const initialState = {
 	authors: [],
@@ -6,7 +6,7 @@ const initialState = {
 
 export const authorsReducer = (state = initialState, action) => {
 	switch (action.type) {
-		case FETCH_AUTHORS:
+		case ADD_AUTHORS:
 			return { ...state, authors: action.payload };
 		default:
 			return state;

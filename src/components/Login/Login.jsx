@@ -1,22 +1,24 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
 import propTypes from 'prop-types';
 
-import { Link, useNavigate } from 'react-router-dom';
-
 import Header from '../Header/Header';
-
 import Input from '../../common/Input/Input';
-
 import Button from '../../common/Button/Button';
 
 import styles from './Login.module.css';
+import { addUserAction } from '../../store/users/actions';
 
-const Login = ({ isValid, setIsValid, userData, setUserData }) => {
+const Login = ({ isValid, setIsValid }) => {
+	const [userData, setUserData] = useState({ email: '', password: '' });
+	const navigate = useNavigate();
+	const dispatch = useDispatch();
+
 	const handleInputChange = (e) => {
 		setUserData({ ...userData, [e.target.name]: e.target.value });
 	};
-	const navigate = useNavigate();
 
 	const submitUserData = async (e) => {
 		e.preventDefault();
@@ -37,12 +39,8 @@ const Login = ({ isValid, setIsValid, userData, setUserData }) => {
 			const data = await response.json();
 
 			if (data.successful) {
+				dispatch(addUserAction(data.user));
 				localStorage.setItem('token', data.result);
-				setUserData({
-					name: data.user.name,
-					email: userData.email,
-					password: userData.password,
-				});
 				navigate('/courses');
 			} else {
 				console.error('Invalid data');
@@ -54,10 +52,10 @@ const Login = ({ isValid, setIsValid, userData, setUserData }) => {
 
 	return (
 		<>
-			<Header userData={userData} />
+			<Header />
 			<div className={styles.container}>
 				<div className={styles.formContainer}>
-					<form onSubmit={(e) => submitUserData(e)}>
+					<form onSubmit={submitUserData}>
 						<label>
 							<b>Email</b>
 							<Input
@@ -80,7 +78,7 @@ const Login = ({ isValid, setIsValid, userData, setUserData }) => {
 								isValid={isValid}
 							/>
 						</label>
-						<Button buttonText='Login' onClick={submitUserData} type='button' />
+						<Button buttonText='Login' type='submit' />
 						<p>If you don't have an account you may</p>
 						<b>
 							<Link to='/registration' className={styles.Link}>
@@ -97,12 +95,6 @@ const Login = ({ isValid, setIsValid, userData, setUserData }) => {
 Login.propTypes = {
 	isValid: propTypes.bool.isRequired,
 	setIsValid: propTypes.func.isRequired,
-	userData: propTypes.shape({
-		name: propTypes.string.isRequired,
-		email: propTypes.string.isRequired,
-		password: propTypes.string.isRequired,
-	}).isRequired,
-	setUserData: propTypes.func.isRequired,
 };
 
 export default Login;

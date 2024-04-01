@@ -1,24 +1,26 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 
 import propTypes from 'prop-types';
 
-import { Link } from 'react-router-dom';
-
-import styles from './CourseCard.module.css';
-
-import Button from '../../../../common/Button/Button';
+import { DELETE_COURSE } from '../../../../store/courses/types';
+import { getCourses, getAuthors } from '../../../../store/selector';
 
 import formatDate from '../../../../helpers/formatDate';
 import formatDuration from '../../../../helpers/formatDuration';
 
+import Button from '../../../../common/Button/Button';
+
 import editButtonImage from '../../../../assets/icons/editButton.svg';
 import deleteButtonImage from '../../../../assets/icons/trashbinButton.svg';
 
-const CourseCard = ({ courses, authors, isAuthenticated }) => {
-	const [isToggled, setIsToggled] = useState(false);
-	const toggleVisibility = () => {
-		setIsToggled(!isToggled);
-	};
+import styles from './CourseCard.module.css';
+
+const CourseCard = ({ isAuthenticated }) => {
+	const dispatch = useDispatch();
+	const courses = useSelector(getCourses);
+	const authors = useSelector(getAuthors);
 
 	return (
 		<div>
@@ -48,14 +50,16 @@ const CourseCard = ({ courses, authors, isAuthenticated }) => {
 							{isAuthenticated && (
 								<div className={styles.buttons}>
 									<Link to={`/courses/${item.id}`}>
-										<Button
-											onClick={toggleVisibility}
-											buttonText='Show Course'
-											type='text'
-										/>
+										<Button buttonText='Show Course' type='text' />
 									</Link>
 									<Button icon={editButtonImage} type='image' />
-									<Button icon={deleteButtonImage} type='image' />
+									<Button
+										icon={deleteButtonImage}
+										type='image'
+										onClick={() =>
+											dispatch({ type: DELETE_COURSE, payload: item.id })
+										}
+									/>
 								</div>
 							)}
 							{!isAuthenticated && (
@@ -66,11 +70,7 @@ const CourseCard = ({ courses, authors, isAuthenticated }) => {
 											courses,
 										}}
 									>
-										<Button
-											onClick={toggleVisibility}
-											buttonText='Show Course'
-											type='text'
-										/>
+										<Button buttonText='Show Course' type='text' />
 									</Link>
 								</div>
 							)}
@@ -83,22 +83,6 @@ const CourseCard = ({ courses, authors, isAuthenticated }) => {
 };
 
 CourseCard.propTypes = {
-	courses: propTypes.arrayOf(
-		propTypes.shape({
-			id: propTypes.string.isRequired,
-			title: propTypes.string.isRequired,
-			description: propTypes.string.isRequired,
-			creationDate: propTypes.string.isRequired,
-			duration: propTypes.number.isRequired,
-			authors: propTypes.arrayOf(propTypes.string.isRequired).isRequired,
-		}).isRequired
-	),
-	authors: propTypes.arrayOf(
-		propTypes.shape({
-			id: propTypes.string.isRequired,
-			name: propTypes.string.isRequired,
-		}).isRequired
-	).isRequired,
 	isAuthenticated: propTypes.bool.isRequired,
 };
 export default CourseCard;

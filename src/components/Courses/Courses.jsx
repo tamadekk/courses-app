@@ -1,20 +1,24 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 import propTypes from 'prop-types';
 
-import { Link } from 'react-router-dom';
+import { getCourses, getAuthors } from '../../store/selector';
 
 import EmptyCourseList from '../EmptyCourseList/EmptyCourseList';
 import CourseCard from './components/CourseCard/CourseCard';
 import SearchBar from '../../common/SearchBar/SearchBar';
-
 import Button from '../../common/Button/Button';
 
 import styles from '../Courses/Courses.module.css';
 
-const Courses = ({ courses, authors, isAuthenticated }) => {
+const Courses = ({ isAuthenticated }) => {
 	const [querry, setQuery] = useState(null);
 	const [filteredCourses, setFilteredCourses] = useState(null);
+	const courses = useSelector(getCourses);
+	const authors = useSelector(getAuthors);
+
 	const onSearchChange = (input) => {
 		setQuery(input.target.value);
 	};
@@ -73,22 +77,6 @@ const Courses = ({ courses, authors, isAuthenticated }) => {
 };
 
 Courses.propTypes = {
-	courses: propTypes.arrayOf(
-		propTypes.shape({
-			id: propTypes.string.isRequired,
-			title: propTypes.string.isRequired,
-			description: propTypes.string.isRequired,
-			creationDate: propTypes.string.isRequired,
-			duration: propTypes.number.isRequired,
-			authors: propTypes.arrayOf(propTypes.string.isRequired).isRequired,
-		}).isRequired
-	),
-	authors: propTypes.arrayOf(
-		propTypes.shape({
-			id: propTypes.string.isRequired,
-			name: propTypes.string.isRequired,
-		}).isRequired
-	).isRequired,
 	isAuthenticated: propTypes.bool.isRequired,
 };
 

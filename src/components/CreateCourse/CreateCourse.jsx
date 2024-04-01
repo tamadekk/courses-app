@@ -1,4 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+
+import { useDispatch, useSelector } from 'react-redux';
+
+import { addCourseAction } from '../../store/courses/actions';
+
+import { addAuthorAction } from '../../store/authors/actions';
 
 import propTypes from 'prop-types';
 
@@ -16,15 +22,10 @@ import Button from '../../common/Button/Button';
 import formatDuration from '../../helpers/formatDuration';
 import getCurrentDate from '../../helpers/getCurrentDate';
 
-const CreateCourse = ({
-	setCourses,
-	authors,
-	setAuthors,
-	isValid,
-	setIsValid,
-	userData,
-}) => {
-	const [authorsList, setAuthorsList] = useState(authors);
+const CreateCourse = ({ isValid, setIsValid, userData }) => {
+	const courses = useSelector((state) => state.courses.courses);
+	const authors = useSelector((state) => state.authors.authors);
+	const [authorsList, setAuthorsList] = useState([]);
 	const [courseAuthorsList, setCourseAuthorsList] = useState([]);
 	const [title, setTitle] = useState('');
 	const [description, setDescription] = useState('');
@@ -34,6 +35,10 @@ const CreateCourse = ({
 		name: '',
 	});
 	const navigate = useNavigate();
+	const dispatch = useDispatch();
+	useEffect(() => {
+		setAuthorsList(authors);
+	}, [authors]);
 
 	const handleTitleChange = (event) => {
 		const regex = /[A-Za-z]/;
@@ -66,8 +71,7 @@ const CreateCourse = ({
 			name: author.name,
 		};
 		if (newAuthor.name.length > 2) {
-			setAuthorsList((prevAuthorsList) => [...prevAuthorsList, newAuthor]);
-			setAuthors((prev) => [...prev, newAuthor]);
+			dispatch(addAuthorAction([...authors, newAuthor]));
 		}
 	};
 
@@ -111,9 +115,7 @@ const CreateCourse = ({
 			duration: parseInt(duration),
 			authors: courseAuthorsList.map((author) => author.id),
 		};
-		setCourses((prev) => {
-			return [...prev, newCourse];
-		});
+		dispatch(addCourseAction([...courses, newCourse]));
 		navigate('/courses/');
 	};
 
@@ -222,14 +224,6 @@ const CreateCourse = ({
 };
 
 CreateCourse.propTypes = {
-	setCourses: propTypes.func,
-	authors: propTypes.arrayOf(
-		propTypes.shape({
-			id: propTypes.string.isRequired,
-			name: propTypes.string.isRequired,
-		}).isRequired
-	).isRequired,
-	setAuthors: propTypes.func.isRequired,
 	isValid: propTypes.bool.isRequired,
 	setIsValid: propTypes.func.isRequired,
 	userData: propTypes.shape({
