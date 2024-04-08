@@ -1,7 +1,10 @@
 import { ADD_USER, USER_LOGOUT } from './types';
 
 const initialState = {
-	authors: [],
+	isAuth: false,
+	name: '',
+	email: '',
+	token: '',
 };
 
 export const userReducer = (state = initialState, action) => {

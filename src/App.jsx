@@ -1,11 +1,5 @@
-import { useState, useEffect } from 'react';
-import { Routes, Route, Outlet, useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-
-import { fetchCoursesData, fetchAuthorsData } from './services.js';
-
-import { addCourseAction } from './store/courses/actions.js';
-import { addAuthorAction } from './store/authors/actions.js';
+import { useState } from 'react';
+import { Routes, Route, Outlet } from 'react-router-dom';
 
 import Courses from './components/Courses/Courses';
 import Header from './components/Header/Header';
@@ -21,45 +15,38 @@ const App = () => {
 		email: '',
 		password: '',
 	});
+	const token = localStorage.getItem('token');
 
 	const [isValid, setIsValid] = useState(true);
-	const navigate = useNavigate();
-	const dispatch = useDispatch();
-	useEffect(() => {
-		fetchCoursesData()
-			.then((data) => {
-				dispatch(addCourseAction(data.result));
-			})
-			.catch((error) => {
-				console.error('Error fetching courses:', error);
-			});
-	}, [dispatch]);
-
-	useEffect(() => {
-		fetchAuthorsData()
-			.then((data) => {
-				dispatch(addAuthorAction(data.result));
-			})
-			.catch((error) => {
-				console.error('Error fetching authors:', error);
-			});
-	}, [dispatch]);
-
-	useEffect(() => {
-		const token = localStorage.getItem('token');
-		if (token) {
-			setAuthenticated(true);
-		} else {
-			if (window.location.pathname !== '/registration') {
-				navigate('/login');
-			}
-		}
-	}, [isAuthenticated, navigate]);
 
 	return (
 		<div>
 			<Routes>
-				{isAuthenticated && <Route path='/courses' />}
+				{token ? (
+					<>
+						<Route
+							path='/'
+							element={
+								<>
+									<Header />
+									<Courses
+										isAuthenticated={isAuthenticated}
+										setAuthenticated={setAuthenticated}
+									/>
+									<Outlet />
+								</>
+							}
+						/>
+					</>
+				) : (
+					<>
+						<Route
+							path='/'
+							element={<Login isValid={isValid} setIsValid={setIsValid} />}
+						/>
+					</>
+				)}
+
 				<Route
 					path='/courses'
 					element={
@@ -71,7 +58,12 @@ const App = () => {
 				>
 					<Route
 						index
-						element={<Courses isAuthenticated={isAuthenticated} />}
+						element={
+							<Courses
+								isAuthenticated={isAuthenticated}
+								setAuthenticated={setAuthenticated}
+							/>
+						}
 					/>
 					<Route path=':courseId' element={<CourseInfo />} />
 				</Route>

@@ -15,7 +15,6 @@ const Header = () => {
 	const handleLogout = () => {
 		localStorage.removeItem('token');
 	};
-
 	const getIsLoggedIn = () => {
 		return localStorage.getItem('token');
 	};
