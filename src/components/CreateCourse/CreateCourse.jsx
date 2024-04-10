@@ -21,10 +21,11 @@ import Button from '../../common/Button/Button';
 
 import formatDuration from '../../helpers/formatDuration';
 import getCurrentDate from '../../helpers/getCurrentDate';
+import { getAuthors, getCourses } from '../../store/selector';
 
-const CreateCourse = ({ isValid, setIsValid, userData }) => {
-	const courses = useSelector((state) => state.courses.courses);
-	const authors = useSelector((state) => state.authors.authors);
+const CreateCourse = ({ isValid, setIsValid }) => {
+	const courses = useSelector(getCourses);
+	const authors = useSelector(getAuthors);
 	const [authorsList, setAuthorsList] = useState([]);
 	const [courseAuthorsList, setCourseAuthorsList] = useState([]);
 	const [title, setTitle] = useState('');
@@ -121,7 +122,7 @@ const CreateCourse = ({ isValid, setIsValid, userData }) => {
 
 	return (
 		<>
-			<Header userData={userData} />
+			<Header />
 			<div className={styles.container}>
 				<h1>Course Edit/Create Course</h1>
 				<div className={styles.formContainer}>
@@ -226,11 +227,6 @@ const CreateCourse = ({ isValid, setIsValid, userData }) => {
 CreateCourse.propTypes = {
 	isValid: propTypes.bool.isRequired,
 	setIsValid: propTypes.func.isRequired,
-	userData: propTypes.shape({
-		name: propTypes.string.isRequired,
-		email: propTypes.string.isRequired,
-		password: propTypes.string.isRequired,
-	}).isRequired,
 };
 
 export default CreateCourse;

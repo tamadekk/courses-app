@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { getUser } from '../../store/selector';
 
@@ -8,12 +8,15 @@ import styles from './Header.module.css';
 
 import Logo from './components/Logo/Logo';
 import Button from './../../common/Button/Button';
+import { userLogOutAcion } from '../../store/users/actions.js';
 
 const Header = () => {
 	const userData = useSelector(getUser);
+	const dispatch = useDispatch();
 	const location = useLocation();
 	const handleLogout = () => {
-		localStorage.removeItem('token');
+		dispatch(userLogOutAcion());
+		return localStorage.removeItem('token');
 	};
 	const getIsLoggedIn = () => {
 		return localStorage.getItem('token');

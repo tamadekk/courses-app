@@ -1,15 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import propTypes from 'prop-types';
 
 import { getCourses, getAuthors } from '../../store/selector';
-
-import { fetchCoursesData, fetchAuthorsData } from '../../services.js';
-
-import { addCourseAction } from '../../store/courses/actions.js';
-import { addAuthorAction } from '../../store/authors/actions.js';
 
 import EmptyCourseList from '../EmptyCourseList/EmptyCourseList';
 import CourseCard from './components/CourseCard/CourseCard';
@@ -24,26 +19,6 @@ const Courses = ({ isAuthenticated, setAuthenticated }) => {
 	const courses = useSelector(getCourses);
 	const authors = useSelector(getAuthors);
 	const navigate = useNavigate();
-	const dispatch = useDispatch();
-	useEffect(() => {
-		fetchCoursesData()
-			.then((data) => {
-				dispatch(addCourseAction(data.result));
-			})
-			.catch((error) => {
-				console.error('Error fetching courses:', error);
-			});
-	}, [dispatch]);
-
-	useEffect(() => {
-		fetchAuthorsData()
-			.then((data) => {
-				dispatch(addAuthorAction(data.result));
-			})
-			.catch((error) => {
-				console.error('Error fetching authors:', error);
-			});
-	}, [dispatch]);
 
 	useEffect(() => {
 		const token = localStorage.getItem('token');

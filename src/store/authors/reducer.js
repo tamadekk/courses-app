@@ -1,13 +1,11 @@
 import { ADD_AUTHORS } from './types';
 
-const initialState = {
-	authors: [],
-};
+export const authorsInitialState = [];
 
-export const authorsReducer = (state = initialState, action) => {
+export const authorsReducer = (state = authorsInitialState, action) => {
 	switch (action.type) {
 		case ADD_AUTHORS:
-			return { ...state, authors: action.payload };
+			return action.payload;
 		default:
 			return state;
 	}

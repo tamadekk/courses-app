@@ -10,6 +10,7 @@ import Button from '../../common/Button/Button';
 
 import styles from './Login.module.css';
 import { addUserAction } from '../../store/users/actions';
+import { loginUser } from '../../services';
 
 const Login = ({ isValid, setIsValid }) => {
 	const [userData, setUserData] = useState({ email: '', password: '' });
@@ -28,16 +29,7 @@ const Login = ({ isValid, setIsValid }) => {
 		}
 
 		try {
-			const response = await fetch('http://localhost:4000/login/', {
-				method: 'POST',
-				body: JSON.stringify(userData),
-				headers: {
-					'Content-Type': 'application/json',
-				},
-			});
-
-			const data = await response.json();
-
+			const data = await loginUser(userData);
 			if (data.successful) {
 				dispatch(addUserAction(data.user));
 				localStorage.setItem('token', data.result);

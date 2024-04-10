@@ -1,5 +1,12 @@
-import { useState } from 'react';
-import { Routes, Route, Outlet } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Routes, Route, Outlet, Navigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+
+import { fetchCourses, fetchAuthors } from './services.js';
+
+import { addCourseAction } from './store/courses/actions.js';
+
+import { addAuthorAction } from './store/authors/actions.js';
 
 import Courses from './components/Courses/Courses';
 import Header from './components/Header/Header';
@@ -15,36 +22,41 @@ const App = () => {
 		email: '',
 		password: '',
 	});
-	const token = localStorage.getItem('token');
+	const dispatch = useDispatch();
+
+	useEffect(() => {
+		if (isAuthenticated)
+			fetchCourses()
+				.then((data) => {
+					dispatch(addCourseAction(data.result));
+				})
+				.catch((error) => {
+					console.error('Error fetching courses:', error);
+				});
+	}, [dispatch, isAuthenticated]);
+
+	useEffect(() => {
+		if (isAuthenticated)
+			fetchAuthors()
+				.then((data) => {
+					dispatch(addAuthorAction(data.result));
+				})
+				.catch((error) => {
+					console.error('Error fetching authors:', error);
+				});
+	}, [dispatch, isAuthenticated]);
+	const isUserAuthorized = () => {
+		const token = localStorage.getItem('token');
+		if (token) return true;
+	};
 
 	const [isValid, setIsValid] = useState(true);
 
 	return (
 		<div>
 			<Routes>
-				{token ? (
-					<>
-						<Route
-							path='/'
-							element={
-								<>
-									<Header />
-									<Courses
-										isAuthenticated={isAuthenticated}
-										setAuthenticated={setAuthenticated}
-									/>
-									<Outlet />
-								</>
-							}
-						/>
-					</>
-				) : (
-					<>
-						<Route
-							path='/'
-							element={<Login isValid={isValid} setIsValid={setIsValid} />}
-						/>
-					</>
+				{isUserAuthorized && (
+					<Route path='/' element={<Navigate to='/courses' />} />
 				)}
 
 				<Route
@@ -84,13 +96,7 @@ const App = () => {
 				/>
 				<Route
 					path='/courses/add'
-					element={
-						<CreateCourse
-							isValid={isValid}
-							setIsValid={setIsValid}
-							userData={userData}
-						/>
-					}
+					element={<CreateCourse isValid={isValid} setIsValid={setIsValid} />}
 				/>
 			</Routes>
 		</div>
