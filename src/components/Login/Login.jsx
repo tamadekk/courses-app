@@ -33,6 +33,7 @@ const Login = ({ isValid, setIsValid }) => {
 			if (data.successful) {
 				dispatch(addUserAction(data.user));
 				localStorage.setItem('token', data.result);
+				localStorage.setItem('name', data.user.name);
 				navigate('/courses');
 			} else {
 				console.error('Invalid data');

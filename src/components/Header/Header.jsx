@@ -1,8 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-
-import { getUser } from '../../store/selector';
+import { useDispatch } from 'react-redux';
 
 import styles from './Header.module.css';
 
@@ -11,7 +9,6 @@ import Button from './../../common/Button/Button';
 import { userLogOutAcion } from '../../store/users/actions.js';
 
 const Header = () => {
-	const userData = useSelector(getUser);
 	const dispatch = useDispatch();
 	const location = useLocation();
 	const handleLogout = () => {
@@ -21,10 +18,12 @@ const Header = () => {
 	const getIsLoggedIn = () => {
 		return localStorage.getItem('token');
 	};
+
+	const userName = localStorage.getItem('name');
 	return (
 		<header className={styles.header}>
 			<Logo />
-			{getIsLoggedIn() ? <p className={styles.p}>{userData.name}</p> : ''}
+			{getIsLoggedIn() ? <p className={styles.p}>{userName}</p> : ''}
 			<Link to={'/login'}>
 				{!['/login', '/registration'].includes(location.pathname) && (
 					<Button
