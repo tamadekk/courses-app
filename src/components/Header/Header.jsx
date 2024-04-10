@@ -13,7 +13,8 @@ const Header = () => {
 	const location = useLocation();
 	const handleLogout = () => {
 		dispatch(userLogOutAcion());
-		return localStorage.removeItem('token');
+		localStorage.removeItem('token');
+		localStorage.removeItem('name');
 	};
 	const getIsLoggedIn = () => {
 		return localStorage.getItem('token');
