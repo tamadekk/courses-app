@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 import propTypes from 'prop-types';
@@ -19,17 +19,18 @@ const Courses = ({ isAuthenticated, setAuthenticated }) => {
 	const courses = useSelector(getCourses);
 	const authors = useSelector(getAuthors);
 	const navigate = useNavigate();
+	const location = useLocation();
 
 	useEffect(() => {
 		const token = localStorage.getItem('token');
 		if (token) {
 			setAuthenticated(true);
 		} else {
-			if (window.location.pathname !== '/registration') {
+			if (location.pathname !== '/registration') {
 				navigate('/login');
 			}
 		}
-	}, [isAuthenticated, navigate, setAuthenticated]);
+	}, [isAuthenticated, navigate, setAuthenticated, location.pathname]);
 
 	const onSearchChange = (input) => {
 		setQuery(input.target.value);
@@ -90,6 +91,7 @@ const Courses = ({ isAuthenticated, setAuthenticated }) => {
 
 Courses.propTypes = {
 	isAuthenticated: propTypes.bool.isRequired,
+	setAuthenticated: propTypes.func.isRequired,
 };
 
 export default Courses;

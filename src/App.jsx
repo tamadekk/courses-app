@@ -4,9 +4,9 @@ import { useDispatch } from 'react-redux';
 
 import { fetchCourses, fetchAuthors } from './services.js';
 
-import { addCourseAction } from './store/courses/actions.js';
+import { addCoursesAction } from './store/courses/actions.js';
 
-import { addAuthorAction } from './store/authors/actions.js';
+import { addAuthorsAction } from './store/authors/actions.js';
 
 import Courses from './components/Courses/Courses';
 import Header from './components/Header/Header';
@@ -28,7 +28,7 @@ const App = () => {
 		if (isAuthenticated)
 			fetchCourses()
 				.then((data) => {
-					dispatch(addCourseAction(data.result));
+					dispatch(addCoursesAction(data.result));
 				})
 				.catch((error) => {
 					console.error('Error fetching courses:', error);
@@ -39,23 +39,23 @@ const App = () => {
 		if (isAuthenticated)
 			fetchAuthors()
 				.then((data) => {
-					dispatch(addAuthorAction(data.result));
+					dispatch(addAuthorsAction(data.result));
 				})
 				.catch((error) => {
 					console.error('Error fetching authors:', error);
 				});
 	}, [dispatch, isAuthenticated]);
+
 	const isUserAuthorized = () => {
 		const token = localStorage.getItem('token');
 		if (token) return true;
 	};
 
 	const [isValid, setIsValid] = useState(true);
-
 	return (
 		<div>
 			<Routes>
-				{isUserAuthorized && (
+				{isUserAuthorized() && (
 					<Route path='/' element={<Navigate to='/courses' />} />
 				)}
 

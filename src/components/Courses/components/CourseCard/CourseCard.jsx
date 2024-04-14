@@ -22,6 +22,9 @@ const CourseCard = ({ isAuthenticated }) => {
 	const courses = useSelector(getCourses);
 	const authors = useSelector(getAuthors);
 
+	const handleDeleteCourse = (id) => {
+		dispatch({ type: DELETE_COURSE, payload: id });
+	};
 	return (
 		<div>
 			{courses.map((item) => (
@@ -56,9 +59,7 @@ const CourseCard = ({ isAuthenticated }) => {
 									<Button
 										icon={deleteButtonImage}
 										type='image'
-										onClick={() =>
-											dispatch({ type: DELETE_COURSE, payload: item.id })
-										}
+										onClick={() => handleDeleteCourse(item.id)}
 									/>
 								</div>
 							)}

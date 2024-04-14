@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { addCourseAction } from '../../store/courses/actions';
-
 import { addAuthorAction } from '../../store/authors/actions';
 
 import propTypes from 'prop-types';
@@ -21,10 +20,9 @@ import Button from '../../common/Button/Button';
 
 import formatDuration from '../../helpers/formatDuration';
 import getCurrentDate from '../../helpers/getCurrentDate';
-import { getAuthors, getCourses } from '../../store/selector';
+import { getAuthors } from '../../store/selector';
 
 const CreateCourse = ({ isValid, setIsValid }) => {
-	const courses = useSelector(getCourses);
 	const authors = useSelector(getAuthors);
 	const [authorsList, setAuthorsList] = useState([]);
 	const [courseAuthorsList, setCourseAuthorsList] = useState([]);
@@ -72,7 +70,7 @@ const CreateCourse = ({ isValid, setIsValid }) => {
 			name: author.name,
 		};
 		if (newAuthor.name.length > 2) {
-			dispatch(addAuthorAction([...authors, newAuthor]));
+			dispatch(addAuthorAction(newAuthor));
 		}
 	};
 
@@ -116,7 +114,7 @@ const CreateCourse = ({ isValid, setIsValid }) => {
 			duration: parseInt(duration),
 			authors: courseAuthorsList.map((author) => author.id),
 		};
-		dispatch(addCourseAction([...courses, newCourse]));
+		dispatch(addCourseAction(newCourse));
 		navigate('/courses/');
 	};
 

@@ -12,7 +12,7 @@ export const userReducer = (state = userInitialState, action) => {
 		case ADD_USER:
 			const { name, email, token } = action.payload;
 			return {
-				isAuth: true,
+				isAuth: !!token,
 				name,
 				email,
 				token,
