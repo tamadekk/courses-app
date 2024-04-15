@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 
 import propTypes from 'prop-types';
 
-import { getCourses, getAuthors } from '../../store/selector';
+import { getCourses } from '../../store/selector';
 
 import EmptyCourseList from '../EmptyCourseList/EmptyCourseList';
 import CourseCard from './components/CourseCard/CourseCard';
@@ -17,7 +17,6 @@ const Courses = ({ isAuthenticated, setAuthenticated }) => {
 	const [querry, setQuery] = useState(null);
 	const [filteredCourses, setFilteredCourses] = useState(null);
 	const courses = useSelector(getCourses);
-	const authors = useSelector(getAuthors);
 	const navigate = useNavigate();
 	const location = useLocation();
 
@@ -47,6 +46,7 @@ const Courses = ({ isAuthenticated, setAuthenticated }) => {
 		const lowercasedData = querry.toLowerCase();
 		const courseFiltered = getFilteredCourse(courses, lowercasedData);
 		setFilteredCourses(courseFiltered);
+		console.log(filteredCourses);
 	};
 
 	const authorAttributes = [
@@ -73,7 +73,6 @@ const Courses = ({ isAuthenticated, setAuthenticated }) => {
 
 					<CourseCard
 						courses={filteredCourses !== null ? filteredCourses : courses}
-						authors={authors}
 						isAuthenticated={isAuthenticated}
 					/>
 				</div>
