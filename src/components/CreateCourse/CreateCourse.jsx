@@ -1,7 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addCourseAction } from '../../store/courses/actions';
-import { addAuthorAction } from '../../store/authors/actions';
+import {
+	addAuthorAction,
+	deleteAuthorAction,
+} from '../../store/authors/actions';
 import propTypes from 'prop-types';
 import { v4 as uuidv4 } from 'uuid';
 import { useNavigate, Link } from 'react-router-dom';
@@ -16,8 +19,6 @@ import { getAuthors } from '../../store/selector';
 
 const CreateCourse = ({ isValid, setIsValid }) => {
 	const authors = useSelector(getAuthors);
-	const [authorsList, setAuthorsList] = useState([]);
-	const [deletedAuthors, setDeletedAuthors] = useState([]);
 	const [courseAuthorsList, setCourseAuthorsList] = useState([]);
 	const [title, setTitle] = useState('');
 	const [description, setDescription] = useState('');
@@ -28,15 +29,9 @@ const CreateCourse = ({ isValid, setIsValid }) => {
 	});
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
-
-	useEffect(() => {
-		setAuthorsList(
-			authors.filter(
-				(author) => !deletedAuthors.find((deleted) => deleted.id === author.id)
-			)
-		);
-	}, [authors, deletedAuthors]);
-
+	const authorsList = authors.filter(
+		(author) => !courseAuthorsList.find((elem) => author.id === elem.id)
+	);
 	const handleTitleChange = (event) => {
 		const regex = /[A-Za-z]/;
 		const value = event.target.value;
@@ -72,31 +67,27 @@ const CreateCourse = ({ isValid, setIsValid }) => {
 			dispatch(addAuthorAction(newAuthor));
 		}
 	};
-
 	const handleAddAuthor = (authorId) => {
-		const editedAuthor = authorsList.find((author) => author.id === authorId);
-		console.log(authorsList);
+		const editedAuthor = authors.find((author) => author.id === authorId);
 		if (editedAuthor) {
 			setCourseAuthorsList((prevCourseAuthorsList) => [
 				...prevCourseAuthorsList,
 				editedAuthor,
 			]);
-			setAuthorsList((prevAuthorsList) =>
-				prevAuthorsList.filter((author) => author.id !== authorId)
-			);
 		}
 	};
 
 	const handleDeleteAuthor = (authorId) => {
 		if (authorId) {
-			setDeletedAuthors((prevDeletedAuthors) => [
-				...prevDeletedAuthors,
-				authorsList.find((author) => author.id === authorId),
-			]);
-			setCourseAuthorsList((prevCourseAuthorsList) =>
-				prevCourseAuthorsList.filter((author) => author.id !== authorId)
-			);
+			dispatch(deleteAuthorAction(authorId));
 		}
+	};
+
+	const handleDeleteCourseAuthor = (authorId) => {
+		if (authorId)
+			setCourseAuthorsList(
+				courseAuthorsList.filter((author) => author.id !== authorId)
+			);
 	};
 
 	const submitCourse = (event) => {
@@ -201,7 +192,7 @@ const CreateCourse = ({ isValid, setIsValid }) => {
 								<AuthorItem
 									authors={courseAuthorsList}
 									handleAddAuthor={handleAddAuthor}
-									onDeleteButtonClick={handleDeleteAuthor}
+									onDeleteButtonClick={handleDeleteCourseAuthor}
 								/>
 							</div>
 						</div>
