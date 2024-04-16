@@ -1,6 +1,12 @@
 import { useState, useEffect } from 'react';
-import { Routes, Route, Outlet, useNavigate } from 'react-router-dom';
-import { mockedCoursesList, mockedAuthorsList } from './constants';
+import { Routes, Route, Outlet, Navigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+
+import { fetchCourses, fetchAuthors } from './services.js';
+
+import { addCoursesAction } from './store/courses/actions.js';
+
+import { addAuthorsAction } from './store/authors/actions.js';
 
 import Courses from './components/Courses/Courses';
 import Header from './components/Header/Header';
@@ -16,39 +22,48 @@ const App = () => {
 		email: '',
 		password: '',
 	});
-	const [courses, setCourses] = useState([]);
-	const [authors, setAuthors] = useState([]);
-	const [isValid, setIsValid] = useState(true);
-
-	const navigate = useNavigate();
+	const dispatch = useDispatch();
 
 	useEffect(() => {
-		setCourses(mockedCoursesList);
-		setAuthors(mockedAuthorsList);
-	}, []);
+		if (isAuthenticated)
+			fetchCourses()
+				.then((data) => {
+					dispatch(addCoursesAction(data.result));
+				})
+				.catch((error) => {
+					console.error('Error fetching courses:', error);
+				});
+	}, [dispatch, isAuthenticated]);
 
 	useEffect(() => {
+		if (isAuthenticated)
+			fetchAuthors()
+				.then((data) => {
+					dispatch(addAuthorsAction(data.result));
+				})
+				.catch((error) => {
+					console.error('Error fetching authors:', error);
+				});
+	}, [dispatch, isAuthenticated]);
+
+	const isUserAuthorized = () => {
 		const token = localStorage.getItem('token');
-		if (token) {
-			setAuthenticated(true);
-		} else {
-			if (window.location.pathname !== '/registration') {
-				navigate('/login');
-			}
-		}
-	}, [isAuthenticated, navigate]);
+		if (token) return true;
+	};
 
-	if (courses.length === 0) return <h1>No Data</h1>;
-
+	const [isValid, setIsValid] = useState(true);
 	return (
 		<div>
 			<Routes>
-				{isAuthenticated && <Route path='/courses' />}
+				{isUserAuthorized() && (
+					<Route path='/' element={<Navigate to='/courses' />} />
+				)}
+
 				<Route
 					path='/courses'
 					element={
 						<>
-							<Header isAuthenticated={isAuthenticated} userData={userData} />
+							<Header isAuthenticated={isAuthenticated} />
 							<Outlet />
 						</>
 					}
@@ -57,27 +72,16 @@ const App = () => {
 						index
 						element={
 							<Courses
-								courses={courses}
-								authors={authors}
 								isAuthenticated={isAuthenticated}
+								setAuthenticated={setAuthenticated}
 							/>
 						}
 					/>
-					<Route
-						path=':courseId'
-						element={<CourseInfo courses={courses} authors={authors} />}
-					/>
+					<Route path=':courseId' element={<CourseInfo />} />
 				</Route>
 				<Route
 					path='/login'
-					element={
-						<Login
-							isValid={isValid}
-							setIsValid={setIsValid}
-							userData={userData}
-							setUserData={setUserData}
-						/>
-					}
+					element={<Login isValid={isValid} setIsValid={setIsValid} />}
 				/>
 				<Route
 					path='/registration'
@@ -92,16 +96,7 @@ const App = () => {
 				/>
 				<Route
 					path='/courses/add'
-					element={
-						<CreateCourse
-							setCourses={setCourses}
-							authors={authors}
-							setAuthors={setAuthors}
-							isValid={isValid}
-							setIsValid={setIsValid}
-							userData={userData}
-						/>
-					}
+					element={<CreateCourse isValid={isValid} setIsValid={setIsValid} />}
 				/>
 			</Routes>
 		</div>

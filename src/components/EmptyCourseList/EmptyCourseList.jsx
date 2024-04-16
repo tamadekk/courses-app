@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 import propTypes from 'prop-types';
 
 import styles from './EmptyCourseList.module.css';
@@ -8,12 +10,14 @@ const EmptyCourseList = ({ tittle, message }) => {
 		<div className={styles.wrapper}>
 			<h1>{tittle}</h1>
 			<p>{message}</p>
-			<Button buttonText='Add New Course' category='text' />
+			<Link to='/courses/add'>
+				<Button buttonText='Add new course' type='text' />
+			</Link>
 		</div>
 	);
 };
 EmptyCourseList.propTypes = {
-	tittle: propTypes.string.isRequired,
+	title: propTypes.string.isRequired,
 	message: propTypes.string.isRequired,
 };
 export default EmptyCourseList;

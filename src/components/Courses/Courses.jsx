@@ -1,20 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 import propTypes from 'prop-types';
 
-import { Link } from 'react-router-dom';
+import { getCourses } from '../../store/selector';
 
 import EmptyCourseList from '../EmptyCourseList/EmptyCourseList';
 import CourseCard from './components/CourseCard/CourseCard';
 import SearchBar from '../../common/SearchBar/SearchBar';
-
 import Button from '../../common/Button/Button';
 
 import styles from '../Courses/Courses.module.css';
 
-const Courses = ({ courses, authors, isAuthenticated }) => {
+const Courses = ({ isAuthenticated, setAuthenticated }) => {
 	const [querry, setQuery] = useState(null);
 	const [filteredCourses, setFilteredCourses] = useState(null);
+	const courses = useSelector(getCourses);
+	const navigate = useNavigate();
+	const location = useLocation();
+
+	useEffect(() => {
+		const token = localStorage.getItem('token');
+		if (token) {
+			setAuthenticated(true);
+		} else {
+			if (location.pathname !== '/registration') {
+				navigate('/login');
+			}
+		}
+	}, [isAuthenticated, navigate, setAuthenticated, location.pathname]);
+
 	const onSearchChange = (input) => {
 		setQuery(input.target.value);
 	};
@@ -30,6 +46,7 @@ const Courses = ({ courses, authors, isAuthenticated }) => {
 		const lowercasedData = querry.toLowerCase();
 		const courseFiltered = getFilteredCourse(courses, lowercasedData);
 		setFilteredCourses(courseFiltered);
+		console.log(filteredCourses);
 	};
 
 	const authorAttributes = [
@@ -56,7 +73,6 @@ const Courses = ({ courses, authors, isAuthenticated }) => {
 
 					<CourseCard
 						courses={filteredCourses !== null ? filteredCourses : courses}
-						authors={authors}
 						isAuthenticated={isAuthenticated}
 					/>
 				</div>
@@ -73,23 +89,8 @@ const Courses = ({ courses, authors, isAuthenticated }) => {
 };
 
 Courses.propTypes = {
-	courses: propTypes.arrayOf(
-		propTypes.shape({
-			id: propTypes.string.isRequired,
-			title: propTypes.string.isRequired,
-			description: propTypes.string.isRequired,
-			creationDate: propTypes.string.isRequired,
-			duration: propTypes.number.isRequired,
-			authors: propTypes.arrayOf(propTypes.string.isRequired).isRequired,
-		}).isRequired
-	),
-	authors: propTypes.arrayOf(
-		propTypes.shape({
-			id: propTypes.string.isRequired,
-			name: propTypes.string.isRequired,
-		}).isRequired
-	).isRequired,
 	isAuthenticated: propTypes.bool.isRequired,
+	setAuthenticated: propTypes.func.isRequired,
 };
 
 export default Courses;
