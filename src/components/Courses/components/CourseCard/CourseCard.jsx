@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import propTypes from 'prop-types';
 
 import { DELETE_COURSE } from '../../../../store/courses/types';
-import { getCourses, getAuthors } from '../../../../store/selector';
+import { getAuthors } from '../../../../store/selector';
 
 import formatDate from '../../../../helpers/formatDate';
 import formatDuration from '../../../../helpers/formatDuration';
@@ -17,11 +17,13 @@ import deleteButtonImage from '../../../../assets/icons/trashbinButton.svg';
 
 import styles from './CourseCard.module.css';
 
-const CourseCard = ({ isAuthenticated }) => {
+const CourseCard = ({ isAuthenticated, courses }) => {
 	const dispatch = useDispatch();
-	const courses = useSelector(getCourses);
 	const authors = useSelector(getAuthors);
 
+	const handleDeleteCourse = (id) => {
+		dispatch({ type: DELETE_COURSE, payload: id });
+	};
 	return (
 		<div>
 			{courses.map((item) => (
@@ -56,9 +58,7 @@ const CourseCard = ({ isAuthenticated }) => {
 									<Button
 										icon={deleteButtonImage}
 										type='image'
-										onClick={() =>
-											dispatch({ type: DELETE_COURSE, payload: item.id })
-										}
+										onClick={() => handleDeleteCourse(item.id)}
 									/>
 								</div>
 							)}

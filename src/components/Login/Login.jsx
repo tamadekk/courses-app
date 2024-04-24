@@ -10,37 +10,35 @@ import Button from '../../common/Button/Button';
 
 import styles from './Login.module.css';
 import { addUserAction } from '../../store/users/actions';
+import { loginUser } from '../../services';
 
 const Login = ({ isValid, setIsValid }) => {
-	const [userData, setUserData] = useState({ email: '', password: '' });
+	const [email, setEmail] = useState('');
+	const [password, setPassword] = useState('');
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 
-	const handleInputChange = (e) => {
-		setUserData({ ...userData, [e.target.name]: e.target.value });
+	const handleEmailChange = (e) => {
+		setEmail(e.target.value);
+	};
+
+	const handlePasswordChange = (e) => {
+		setPassword(e.target.value);
 	};
 
 	const submitUserData = async (e) => {
 		e.preventDefault();
-		if (!(userData.email && userData.password)) {
+		if (!(email && password)) {
 			setIsValid(false);
 			return;
 		}
 
 		try {
-			const response = await fetch('http://localhost:4000/login/', {
-				method: 'POST',
-				body: JSON.stringify(userData),
-				headers: {
-					'Content-Type': 'application/json',
-				},
-			});
-
-			const data = await response.json();
-
+			const data = await loginUser({ email, password });
 			if (data.successful) {
-				dispatch(addUserAction(data.user));
 				localStorage.setItem('token', data.result);
+				localStorage.setItem('name', data.user.name);
+				dispatch(addUserAction(data));
 				navigate('/courses');
 			} else {
 				console.error('Invalid data');
@@ -62,8 +60,8 @@ const Login = ({ isValid, setIsValid }) => {
 								type='email'
 								name='email'
 								isRequired
-								onChange={handleInputChange}
-								value={userData.email}
+								onChange={handleEmailChange}
+								value={email}
 								isValid={isValid}
 							/>
 						</label>
@@ -73,8 +71,8 @@ const Login = ({ isValid, setIsValid }) => {
 								type='password'
 								name='password'
 								isRequired
-								onChange={handleInputChange}
-								value={userData.password}
+								onChange={handlePasswordChange}
+								value={password}
 								isValid={isValid}
 							/>
 						</label>

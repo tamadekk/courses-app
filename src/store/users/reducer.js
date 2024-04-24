@@ -1,15 +1,33 @@
 import { ADD_USER, USER_LOGOUT } from './types';
 
-const initialState = {
-	authors: [],
+export const userInitialState = {
+	isAuth: false,
+	name: '',
+	email: '',
+	token: '',
 };
 
-export const userReducer = (state = initialState, action) => {
+export const userReducer = (state = userInitialState, action) => {
 	switch (action.type) {
 		case ADD_USER:
-			return { ...state, user: action.payload };
+			const { name, email, token } = action.payload.user;
+			if (action.payload.result) {
+				return {
+					isAuth: !!token,
+					name,
+					email,
+					token,
+				};
+			} else return;
+
 		case USER_LOGOUT:
-			return { user: null };
+			return {
+				isAuth: false,
+				name: '',
+				email: '',
+				token: '',
+			};
+
 		default:
 			return state;
 	}

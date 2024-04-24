@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 import propTypes from 'prop-types';
 
-import { getCourses, getAuthors } from '../../store/selector';
+import { getCourses } from '../../store/selector';
 
 import EmptyCourseList from '../EmptyCourseList/EmptyCourseList';
 import CourseCard from './components/CourseCard/CourseCard';
@@ -13,11 +13,23 @@ import Button from '../../common/Button/Button';
 
 import styles from '../Courses/Courses.module.css';
 
-const Courses = ({ isAuthenticated }) => {
+const Courses = ({ isAuthenticated, setAuthenticated }) => {
 	const [querry, setQuery] = useState(null);
 	const [filteredCourses, setFilteredCourses] = useState(null);
 	const courses = useSelector(getCourses);
-	const authors = useSelector(getAuthors);
+	const navigate = useNavigate();
+	const location = useLocation();
+
+	useEffect(() => {
+		const token = localStorage.getItem('token');
+		if (token) {
+			setAuthenticated(true);
+		} else {
+			if (location.pathname !== '/registration') {
+				navigate('/login');
+			}
+		}
+	}, [isAuthenticated, navigate, setAuthenticated, location.pathname]);
 
 	const onSearchChange = (input) => {
 		setQuery(input.target.value);
@@ -34,6 +46,7 @@ const Courses = ({ isAuthenticated }) => {
 		const lowercasedData = querry.toLowerCase();
 		const courseFiltered = getFilteredCourse(courses, lowercasedData);
 		setFilteredCourses(courseFiltered);
+		console.log(filteredCourses);
 	};
 
 	const authorAttributes = [
@@ -60,7 +73,6 @@ const Courses = ({ isAuthenticated }) => {
 
 					<CourseCard
 						courses={filteredCourses !== null ? filteredCourses : courses}
-						authors={authors}
 						isAuthenticated={isAuthenticated}
 					/>
 				</div>
@@ -78,6 +90,7 @@ const Courses = ({ isAuthenticated }) => {
 
 Courses.propTypes = {
 	isAuthenticated: propTypes.bool.isRequired,
+	setAuthenticated: propTypes.func.isRequired,
 };
 
 export default Courses;
