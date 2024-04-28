@@ -1,5 +1,7 @@
 import { Link } from 'react-router-dom';
 
+import getUserRole from '../../helpers/getUserRole';
+
 import propTypes from 'prop-types';
 
 import styles from './EmptyCourseList.module.css';
@@ -10,9 +12,15 @@ const EmptyCourseList = ({ tittle, message }) => {
 		<div className={styles.wrapper}>
 			<h1>{tittle}</h1>
 			<p>{message}</p>
-			<Link to='/courses/add'>
-				<Button buttonText='Add new course' type='text' />
-			</Link>
+			{getUserRole() === 'admin' ? (
+				<Link to='/courses/add'>
+					<Button buttonText='Add new course' type='text' />
+				</Link>
+			) : (
+				<p>
+					You don't have permissions to create a course. Please log in as ADMIN
+				</p>
+			)}
 		</div>
 	);
 };

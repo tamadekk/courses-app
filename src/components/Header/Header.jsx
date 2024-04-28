@@ -2,17 +2,19 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
+import { performLogout } from '../../store/users/thunk';
+
 import styles from './Header.module.css';
 
 import Logo from './components/Logo/Logo';
 import Button from './../../common/Button/Button';
-import { userLogOutAcion } from '../../store/users/actions.js';
 
 const Header = () => {
 	const dispatch = useDispatch();
 	const location = useLocation();
 	const handleLogout = () => {
-		dispatch(userLogOutAcion());
+		const token = localStorage.getItem('token');
+		dispatch(performLogout(token));
 		localStorage.removeItem('token');
 		localStorage.removeItem('name');
 	};

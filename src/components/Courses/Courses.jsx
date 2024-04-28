@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import propTypes from 'prop-types';
 
-import { getCourses } from '../../store/selector';
+import { getCourses, selectUserRole } from '../../store/selector';
+
+import { getCurrentUser } from '../../store/users/thunk';
 
 import EmptyCourseList from '../EmptyCourseList/EmptyCourseList';
 import CourseCard from './components/CourseCard/CourseCard';
@@ -19,6 +21,7 @@ const Courses = ({ isAuthenticated, setAuthenticated }) => {
 	const courses = useSelector(getCourses);
 	const navigate = useNavigate();
 	const location = useLocation();
+	const dispatch = useDispatch();
 
 	useEffect(() => {
 		const token = localStorage.getItem('token');
@@ -30,6 +33,12 @@ const Courses = ({ isAuthenticated, setAuthenticated }) => {
 			}
 		}
 	}, [isAuthenticated, navigate, setAuthenticated, location.pathname]);
+
+	useEffect(() => {
+		dispatch(getCurrentUser());
+	}, [dispatch]);
+
+	const currentUserRole = useSelector(selectUserRole);
 
 	const onSearchChange = (input) => {
 		setQuery(input.target.value);
@@ -66,9 +75,12 @@ const Courses = ({ isAuthenticated, setAuthenticated }) => {
 							onSearchChange={onSearchChange}
 							buttonHandler={searchHandlerButton}
 						/>
-						<Link to='/courses/add'>
-							<Button buttonText='Add new course' type='text' />
-						</Link>
+
+						{currentUserRole === 'admin' && (
+							<Link to='/courses/add'>
+								<Button buttonText='Add new course' type='text' />
+							</Link>
+						)}
 					</div>
 
 					<CourseCard

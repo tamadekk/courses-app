@@ -1,17 +1,30 @@
-import { addUserAction } from './actions';
+import { getUserRoleAction, userLogOutAcion } from './actions';
 
-export const fetchUserData = () => async (dispatch) => {
-	try {
-		const token = localStorage.getItem('token');
-		const response = await fetch('http://localhost:4000/users/me', {
-			headers: {
-				Authorization: token,
-				'Content-Type': 'application/json',
-			},
-		});
-		const userData = await response.json();
-		dispatch(addUserAction(userData));
-	} catch (error) {
-		console.error('Error fetching user data:', error);
-	}
+import { getUser, userLogOut } from '../../services';
+
+export const getCurrentUser = () => {
+	return async function (dispatch) {
+		try {
+			const response = await getUser();
+			dispatch(getUserRoleAction(response));
+		} catch (error) {
+			console.log(
+				'Error happened during getting a current user, error message: ',
+				error
+			);
+		}
+	};
+};
+
+export const performLogout = (token) => {
+	return async function (dispatch) {
+		try {
+			const response = await userLogOut(token);
+			if (response.ok) dispatch(userLogOutAcion());
+
+			return response;
+		} catch (error) {
+			console.log('Error happened during logging out, error message: ', error);
+		}
+	};
 };

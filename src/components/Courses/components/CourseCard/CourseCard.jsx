@@ -4,8 +4,9 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import propTypes from 'prop-types';
 
-import { DELETE_COURSE } from '../../../../store/courses/types';
-import { getAuthors } from '../../../../store/selector';
+import { performCourseDelete } from '../../../../store/courses/thunk';
+
+import { getAuthors, selectUserRole } from '../../../../store/selector';
 
 import formatDate from '../../../../helpers/formatDate';
 import formatDuration from '../../../../helpers/formatDuration';
@@ -20,10 +21,12 @@ import styles from './CourseCard.module.css';
 const CourseCard = ({ isAuthenticated, courses }) => {
 	const dispatch = useDispatch();
 	const authors = useSelector(getAuthors);
+	const currentUserRole = useSelector(selectUserRole);
 
-	const handleDeleteCourse = (id) => {
-		dispatch({ type: DELETE_COURSE, payload: id });
+	const handleDeleteCourse = (courseID) => {
+		dispatch(performCourseDelete(courseID));
 	};
+	const handleEditCourse = (courseID) => {};
 	return (
 		<div>
 			{courses.map((item) => (
@@ -49,19 +52,27 @@ const CourseCard = ({ isAuthenticated, courses }) => {
 							<p>
 								<b>Created:</b> <span>{formatDate(item.creationDate)}</span>
 							</p>
-							{isAuthenticated && (
-								<div className={styles.buttons}>
-									<Link to={`/courses/${item.id}`}>
-										<Button buttonText='Show Course' type='text' />
-									</Link>
-									<Button icon={editButtonImage} type='image' />
-									<Button
-										icon={deleteButtonImage}
-										type='image'
-										onClick={() => handleDeleteCourse(item.id)}
-									/>
-								</div>
-							)}
+							<div className={styles.buttons}>
+								<Link to={`/courses/${item.id}`}>
+									<Button buttonText='Show Course' type='text' />
+								</Link>
+								{currentUserRole === 'admin' && (
+									<>
+										<Link to='/update'>
+											<Button
+												icon={editButtonImage}
+												type='image'
+												onClick={() => handleEditCourse(item.id)}
+											/>
+										</Link>
+										<Button
+											icon={deleteButtonImage}
+											type='image'
+											onClick={() => handleDeleteCourse(item.id)}
+										/>
+									</>
+								)}
+							</div>
 							{!isAuthenticated && (
 								<div className={styles.buttons}>
 									<Link

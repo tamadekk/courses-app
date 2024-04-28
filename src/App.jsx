@@ -8,12 +8,13 @@ import { addCoursesAction } from './store/courses/actions.js';
 
 import { addAuthorsAction } from './store/authors/actions.js';
 
+import PrivateRoute from './components/PrivateRoute/PrivateRoute.jsx';
 import Courses from './components/Courses/Courses';
 import Header from './components/Header/Header';
 import CourseInfo from './components/CourseInfo/CourseInfo';
 import Login from './components/Login/Login.jsx';
 import Registration from './components/Registration/Registration.jsx';
-import CreateCourse from './components/CreateCourse/CreateCourse.jsx';
+import CourseForm from './components/CourseForm/CourseForm.jsx';
 
 const App = () => {
 	const [isAuthenticated, setAuthenticated] = useState(false);
@@ -96,7 +97,11 @@ const App = () => {
 				/>
 				<Route
 					path='/courses/add'
-					element={<CreateCourse isValid={isValid} setIsValid={setIsValid} />}
+					element={
+						<PrivateRoute>
+							<CourseForm isValid={isValid} setIsValid={setIsValid} />
+						</PrivateRoute>
+					}
 				/>
 			</Routes>
 		</div>

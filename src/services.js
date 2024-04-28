@@ -25,10 +25,57 @@ export const loginUser = async (userData) => {
 				'Content-Type': 'application/json',
 			},
 		});
-
 		const data = await response.json();
 		return data;
 	} catch (error) {
 		throw new Error('Error during login: ' + error.message);
+	}
+};
+
+export const userLogOut = async (userToken) => {
+	try {
+		const response = await fetch(`${BASE_API_URL}/logout/`, {
+			method: 'DELETE',
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: `${userToken}`,
+			},
+		});
+		return response;
+	} catch (error) {
+		throw new Error('Error during logout: ' + error.message);
+	}
+};
+
+export const getUser = async () => {
+	try {
+		const token = localStorage.getItem('token');
+		const response = await fetch(`${BASE_API_URL}/users/me`, {
+			headers: {
+				Authorization: token,
+				'Content-Type': 'application/json',
+			},
+		});
+		const data = await response.json();
+		return data;
+	} catch (error) {
+		console.error('Error getting user data:', error);
+	}
+};
+
+export const deleteCourse = async (courseID) => {
+	try {
+		const userToken = localStorage.getItem('token');
+		const response = await fetch(`${BASE_API_URL}/courses/${courseID}`, {
+			method: 'DELETE',
+			headers: {
+				id: courseID,
+				'Content-type': 'application/json',
+				Authorization: userToken,
+			},
+		});
+		return response;
+	} catch (error) {
+		console.log('Error during deleting the course from back-end side!');
 	}
 };

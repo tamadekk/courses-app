@@ -1,18 +1,19 @@
-import React, { useState, useEffect } from 'react';
-
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-
-import { addCourseAction } from '../../store/courses/actions';
-
-import { addAuthorAction } from '../../store/authors/actions';
-
-import propTypes from 'prop-types';
-
-import { v4 as uuidv4 } from 'uuid';
-
 import { useNavigate, Link } from 'react-router-dom';
 
-import styles from './CreateCourse.module.css';
+import { addCourseAction } from '../../store/courses/actions';
+import {
+	addAuthorAction,
+	deleteAuthorAction,
+} from '../../store/authors/actions';
+
+import { getAuthors } from '../../store/selector';
+
+import propTypes from 'prop-types';
+import { v4 as uuidv4 } from 'uuid';
+
+import styles from './CourseForm.module.css';
 
 import Header from '../Header/Header';
 import Input from '../../common/Input/Input';
@@ -22,10 +23,8 @@ import Button from '../../common/Button/Button';
 import formatDuration from '../../helpers/formatDuration';
 import getCurrentDate from '../../helpers/getCurrentDate';
 
-const CreateCourse = ({ isValid, setIsValid, userData }) => {
-	const courses = useSelector((state) => state.courses.courses);
-	const authors = useSelector((state) => state.authors.authors);
-	const [authorsList, setAuthorsList] = useState([]);
+const CourseForm = ({ isValid, setIsValid }) => {
+	const authors = useSelector(getAuthors);
 	const [courseAuthorsList, setCourseAuthorsList] = useState([]);
 	const [title, setTitle] = useState('');
 	const [description, setDescription] = useState('');
@@ -36,10 +35,9 @@ const CreateCourse = ({ isValid, setIsValid, userData }) => {
 	});
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
-	useEffect(() => {
-		setAuthorsList(authors);
-	}, [authors]);
-
+	const authorsList = authors.filter(
+		(author) => !courseAuthorsList.find((elem) => author.id === elem.id)
+	);
 	const handleTitleChange = (event) => {
 		const regex = /[A-Za-z]/;
 		const value = event.target.value;
@@ -65,41 +63,39 @@ const CreateCourse = ({ isValid, setIsValid, userData }) => {
 			}));
 		}
 	};
+
 	const handleCreateAuthor = () => {
 		const newAuthor = {
 			id: uuidv4(),
 			name: author.name,
 		};
 		if (newAuthor.name.length > 2) {
-			dispatch(addAuthorAction([...authors, newAuthor]));
+			dispatch(addAuthorAction(newAuthor));
 		}
 	};
-
 	const handleAddAuthor = (authorId) => {
-		const editedAuthor = authorsList.find((author) => author.id === authorId);
+		const editedAuthor = authors.find((author) => author.id === authorId);
 		if (editedAuthor) {
 			setCourseAuthorsList((prevCourseAuthorsList) => [
 				...prevCourseAuthorsList,
 				editedAuthor,
 			]);
-
-			setAuthorsList((prevAuthorsList) =>
-				prevAuthorsList.filter((author) => author.id !== authorId)
-			);
 		}
 	};
+
 	const handleDeleteAuthor = (authorId) => {
-		const deletedAuthor = courseAuthorsList.find(
-			(author) => author.id === authorId
-		);
-		if (deletedAuthor) {
-			setAuthorsList((prevAuthorsList) => [...prevAuthorsList, deletedAuthor]);
-
-			setCourseAuthorsList((prevCourseAuthorsList) =>
-				prevCourseAuthorsList.filter((author) => author.id !== authorId)
-			);
+		if (authorId) {
+			dispatch(deleteAuthorAction(authorId));
 		}
 	};
+
+	const handleDeleteCourseAuthor = (authorId) => {
+		if (authorId)
+			setCourseAuthorsList(
+				courseAuthorsList.filter((author) => author.id !== authorId)
+			);
+	};
+
 	const submitCourse = (event) => {
 		event.preventDefault();
 		if (!(title && description && duration)) {
@@ -115,13 +111,13 @@ const CreateCourse = ({ isValid, setIsValid, userData }) => {
 			duration: parseInt(duration),
 			authors: courseAuthorsList.map((author) => author.id),
 		};
-		dispatch(addCourseAction([...courses, newCourse]));
+		dispatch(addCourseAction(newCourse));
 		navigate('/courses/');
 	};
 
 	return (
 		<>
-			<Header userData={userData} />
+			<Header />
 			<div className={styles.container}>
 				<h1>Course Edit/Create Course</h1>
 				<div className={styles.formContainer}>
@@ -202,7 +198,7 @@ const CreateCourse = ({ isValid, setIsValid, userData }) => {
 								<AuthorItem
 									authors={courseAuthorsList}
 									handleAddAuthor={handleAddAuthor}
-									onDeleteButtonClick={handleDeleteAuthor}
+									onDeleteButtonClick={handleDeleteCourseAuthor}
 								/>
 							</div>
 						</div>
@@ -223,14 +219,9 @@ const CreateCourse = ({ isValid, setIsValid, userData }) => {
 	);
 };
 
-CreateCourse.propTypes = {
+CourseForm.propTypes = {
 	isValid: propTypes.bool.isRequired,
 	setIsValid: propTypes.func.isRequired,
-	userData: propTypes.shape({
-		name: propTypes.string.isRequired,
-		email: propTypes.string.isRequired,
-		password: propTypes.string.isRequired,
-	}).isRequired,
 };
 
-export default CreateCourse;
+export default CourseForm;
