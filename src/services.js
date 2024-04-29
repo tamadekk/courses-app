@@ -32,6 +32,26 @@ export const loginUser = async (userData) => {
 	}
 };
 
+export const userRegistration = async (userData) => {
+	try {
+		const response = await fetch('http://localhost:4000/register/', {
+			method: 'POST',
+			body: JSON.stringify(userData),
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		});
+
+		const data = await response.json();
+		if (data.successful) {
+			window.location.href = '/login';
+		} else {
+			console.error('Invalid data');
+		}
+	} catch (error) {
+		console.error('Error during registration:', error);
+	}
+};
 export const userLogOut = async (userToken) => {
 	try {
 		const response = await fetch(`${BASE_API_URL}/logout/`, {
@@ -101,7 +121,10 @@ export const deleteCourse = async (courseID, userToken) => {
 		});
 		return response;
 	} catch (error) {
-		console.log('Error during deleting the course from back-end side!');
+		console.error(
+			'Error during deleting the course from back-end side!',
+			error
+		);
 	}
 };
 
@@ -169,6 +192,9 @@ export const deleteAuthor = async (authorID, userToken) => {
 		});
 		return response;
 	} catch (error) {
-		console.log('Error during deleting the course from back-end side!');
+		console.error(
+			'Error during deleting the course from back-end side!',
+			error
+		);
 	}
 };

@@ -7,7 +7,7 @@ export const performAddAuthor = (newAuthor, userToken) => {
 			const response = await addAuthor(newAuthor, userToken);
 			if (response) dispatch(addAuthorAction(response));
 		} catch (error) {
-			console.log('Error during adding a new author -> thunk.js ');
+			console.error('Error during adding a new author -> thunk.js ', error);
 		}
 	};
 };
@@ -18,7 +18,7 @@ export const performDeleteAuthor = (authorID, userToken) => {
 			const response = await deleteAuthor(authorID, userToken);
 			if (response.ok) dispatch(deleteAuthorAction(authorID));
 		} catch (error) {
-			console.log('Error during deleting the author -> thunk.js ');
+			console.error('Error during deleting the author -> thunk.js ', error);
 		}
 	};
 };
