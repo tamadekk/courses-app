@@ -63,13 +63,106 @@ export const getUser = async () => {
 	}
 };
 
-export const deleteCourse = async (courseID) => {
+export const addCourse = async (newCourse, userToken) => {
 	try {
-		const userToken = localStorage.getItem('token');
+		const response = await fetch(`${BASE_API_URL}/courses/add`, {
+			method: 'POST',
+			body: JSON.stringify(newCourse),
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: `${userToken}`,
+			},
+		});
+
+		if (!response.ok) {
+			throw new Error(`Failed to add course: ${response.statusText}`);
+		}
+		const responseBody = await response.json();
+		if (responseBody.successful) {
+			return responseBody.result;
+		} else {
+			throw new Error('Failed to add course: Response indicates failure');
+		}
+	} catch (error) {
+		console.error('Error during adding a new course: ', error);
+		throw error;
+	}
+};
+
+export const deleteCourse = async (courseID, userToken) => {
+	try {
 		const response = await fetch(`${BASE_API_URL}/courses/${courseID}`, {
 			method: 'DELETE',
 			headers: {
 				id: courseID,
+				'Content-type': 'application/json',
+				Authorization: userToken,
+			},
+		});
+		return response;
+	} catch (error) {
+		console.log('Error during deleting the course from back-end side!');
+	}
+};
+
+export const updateCourse = async (updatedCourse, userToken, courseID) => {
+	try {
+		const response = await fetch(`${BASE_API_URL}/courses/${courseID}`, {
+			method: 'PUT',
+			body: JSON.stringify(updatedCourse),
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: `${userToken}`,
+			},
+		});
+
+		if (!response.ok) {
+			throw new Error(`Failed to add course: ${response.statusText}`);
+		}
+		const responseBody = await response.json();
+		if (responseBody.successful) {
+			return responseBody.result;
+		} else {
+			throw new Error('Failed to add course: Response indicates failure');
+		}
+	} catch (error) {
+		console.error('Error during updating the course: ', error);
+		throw error;
+	}
+};
+
+export const addAuthor = async (newAuthor) => {
+	try {
+		const userToken = localStorage.getItem('token');
+		const response = await fetch(`${BASE_API_URL}/authors/add`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: userToken,
+			},
+			body: JSON.stringify(newAuthor),
+		});
+		if (!response.ok) {
+			throw new Error(`Failed to add author: ${response.statusText}`);
+		}
+		const responseBody = await response.json();
+		if (responseBody.successful) {
+			return responseBody.result;
+		} else {
+			throw new Error('Failed to add author: Response indicates failure');
+		}
+	} catch (error) {
+		console.error('Error during adding a new author: ', error);
+		throw error;
+	}
+};
+
+export const deleteAuthor = async (authorID, userToken) => {
+	try {
+		const response = await fetch(`${BASE_API_URL}/authors/${authorID}`, {
+			method: 'DELETE',
+			headers: {
+				id: authorID,
 				'Content-type': 'application/json',
 				Authorization: userToken,
 			},

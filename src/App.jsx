@@ -103,6 +103,18 @@ const App = () => {
 						</PrivateRoute>
 					}
 				/>
+				<Route
+					path='/courses/update/:courseId'
+					element={
+						<PrivateRoute>
+							<CourseForm
+								isValid={isValid}
+								setIsValid={setIsValid}
+								editingCourse={true}
+							/>
+						</PrivateRoute>
+					}
+				/>
 			</Routes>
 		</div>
 	);

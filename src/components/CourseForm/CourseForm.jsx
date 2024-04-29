@@ -1,17 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, Link } from 'react-router-dom';
-
-import { addCourseAction } from '../../store/courses/actions';
-import {
-	addAuthorAction,
-	deleteAuthorAction,
-} from '../../store/authors/actions';
+import { useNavigate, Link, useParams } from 'react-router-dom';
 
 import { getAuthors } from '../../store/selector';
 
 import propTypes from 'prop-types';
-import { v4 as uuidv4 } from 'uuid';
 
 import styles from './CourseForm.module.css';
 
@@ -22,26 +15,34 @@ import Button from '../../common/Button/Button';
 
 import formatDuration from '../../helpers/formatDuration';
 import getCurrentDate from '../../helpers/getCurrentDate';
+import {
+	performAddCourse,
+	performUpdateCourse,
+} from '../../store/courses/thunk';
+import {
+	performAddAuthor,
+	performDeleteAuthor,
+} from '../../store/authors/thunk';
 
-const CourseForm = ({ isValid, setIsValid }) => {
+const CourseForm = ({ isValid, setIsValid, editingCourse }) => {
 	const authors = useSelector(getAuthors);
 	const [courseAuthorsList, setCourseAuthorsList] = useState([]);
 	const [title, setTitle] = useState('');
 	const [description, setDescription] = useState('');
 	const [duration, setDuration] = useState(0);
 	const [author, setAuthor] = useState({
-		id: uuidv4(),
 		name: '',
 	});
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
+
 	const authorsList = authors.filter(
 		(author) => !courseAuthorsList.find((elem) => author.id === elem.id)
 	);
 	const handleTitleChange = (event) => {
 		const regex = /[A-Za-z]/;
 		const value = event.target.value;
-		if (regex.test(value) && value.length > 2) setTitle(value);
+		if (regex.test(value)) setTitle(value);
 	};
 
 	const handleDescriptionChange = (event) => {
@@ -63,14 +64,31 @@ const CourseForm = ({ isValid, setIsValid }) => {
 			}));
 		}
 	};
+	const { courseId } = useParams();
+	const courseData = useSelector((state) =>
+		state.courses.find((course) => course.id === courseId)
+	);
+
+	useEffect(() => {
+		if (editingCourse) {
+			setTitle(courseData.title);
+			setDescription(courseData.description);
+			setDuration(courseData.duration);
+			setCourseAuthorsList(
+				courseData.authors.map((authorId) =>
+					authors.find((author) => author.id === authorId)
+				)
+			);
+		}
+	}, [courseData, authors, editingCourse]);
 
 	const handleCreateAuthor = () => {
+		const userToken = localStorage.getItem('token');
 		const newAuthor = {
-			id: uuidv4(),
 			name: author.name,
 		};
 		if (newAuthor.name.length > 2) {
-			dispatch(addAuthorAction(newAuthor));
+			dispatch(performAddAuthor(newAuthor, userToken));
 		}
 	};
 	const handleAddAuthor = (authorId) => {
@@ -84,8 +102,9 @@ const CourseForm = ({ isValid, setIsValid }) => {
 	};
 
 	const handleDeleteAuthor = (authorId) => {
+		const userToken = localStorage.getItem('token');
 		if (authorId) {
-			dispatch(deleteAuthorAction(authorId));
+			dispatch(performDeleteAuthor(authorId, userToken));
 		}
 	};
 
@@ -104,14 +123,16 @@ const CourseForm = ({ isValid, setIsValid }) => {
 		}
 
 		const newCourse = {
-			id: uuidv4(),
 			title,
 			description,
 			creationDate: getCurrentDate(),
 			duration: parseInt(duration),
 			authors: courseAuthorsList.map((author) => author.id),
 		};
-		dispatch(addCourseAction(newCourse));
+		const userToken = localStorage.getItem('token');
+		if (editingCourse)
+			dispatch(performUpdateCourse(newCourse, userToken, courseId));
+		else dispatch(performAddCourse(newCourse, userToken));
 		navigate('/courses/');
 	};
 
@@ -119,7 +140,7 @@ const CourseForm = ({ isValid, setIsValid }) => {
 		<>
 			<Header />
 			<div className={styles.container}>
-				<h1>Course Edit/Create Course</h1>
+				<h1>{editingCourse ? 'Edit Course' : 'Create Course'}</h1>
 				<div className={styles.formContainer}>
 					<form onSubmit={(e) => submitCourse(e)}>
 						<h1>Main info</h1>
@@ -174,7 +195,6 @@ const CourseForm = ({ isValid, setIsValid }) => {
 								<Input
 									type='text'
 									name='authorName'
-									value={author}
 									onChange={handleAuthorChange}
 									labelText='Author name'
 									placeholderText='Input text'
@@ -205,12 +225,12 @@ const CourseForm = ({ isValid, setIsValid }) => {
 					</form>
 					<div className={styles.ButtonRow}>
 						<Button
-							buttonText='create course'
+							buttonText={editingCourse ? 'Update Course' : 'Create Course'}
 							onClick={submitCourse}
 							type='button'
 						/>
 						<Link to='/courses/'>
-							<Button type='submit' buttonText='cancel' />
+							<Button type='submit' buttonText='Cancel' />
 						</Link>
 					</div>
 				</div>
@@ -222,6 +242,7 @@ const CourseForm = ({ isValid, setIsValid }) => {
 CourseForm.propTypes = {
 	isValid: propTypes.bool.isRequired,
 	setIsValid: propTypes.func.isRequired,
+	editingCourse: propTypes.bool,
 };
 
 export default CourseForm;

@@ -22,11 +22,11 @@ const CourseCard = ({ isAuthenticated, courses }) => {
 	const dispatch = useDispatch();
 	const authors = useSelector(getAuthors);
 	const currentUserRole = useSelector(selectUserRole);
-
+	const userToken = localStorage.getItem('token');
 	const handleDeleteCourse = (courseID) => {
-		dispatch(performCourseDelete(courseID));
+		dispatch(performCourseDelete(courseID, userToken));
 	};
-	const handleEditCourse = (courseID) => {};
+
 	return (
 		<div>
 			{courses.map((item) => (
@@ -58,12 +58,8 @@ const CourseCard = ({ isAuthenticated, courses }) => {
 								</Link>
 								{currentUserRole === 'admin' && (
 									<>
-										<Link to='/update'>
-											<Button
-												icon={editButtonImage}
-												type='image'
-												onClick={() => handleEditCourse(item.id)}
-											/>
+										<Link to={`/courses/update/${item.id}`}>
+											<Button icon={editButtonImage} type='image' />
 										</Link>
 										<Button
 											icon={deleteButtonImage}
