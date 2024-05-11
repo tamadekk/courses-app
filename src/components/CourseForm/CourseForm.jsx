@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, Link, useParams } from 'react-router-dom';
 
-import { getAuthors } from '../../store/selector';
+import { getAuthors, getCourseDataById } from '../../store/selector';
 
 import propTypes from 'prop-types';
 
@@ -65,9 +65,7 @@ const CourseForm = ({ isValid, setIsValid, editingCourse }) => {
 		}
 	};
 	const { courseId } = useParams();
-	const courseData = useSelector((state) =>
-		state.courses.find((course) => course.id === courseId)
-	);
+	const courseData = useSelector((state) => getCourseDataById(state, courseId));
 
 	useEffect(() => {
 		if (editingCourse) {
@@ -83,17 +81,16 @@ const CourseForm = ({ isValid, setIsValid, editingCourse }) => {
 	}, [courseData, authors, editingCourse]);
 
 	const handleCreateAuthor = () => {
-		const userToken = localStorage.getItem('token');
 		const newAuthor = {
 			name: author.name,
 		};
 		if (newAuthor.name.length > 2) {
-			dispatch(performAddAuthor(newAuthor, userToken));
+			dispatch(performAddAuthor(newAuthor));
 		}
 	};
 	const handleAddAuthor = (authorId) => {
 		const editedAuthor = authors.find((author) => author.id === authorId);
-		if (editedAuthor) {
+		if (editedAuthor && !courseAuthorsList.includes(editedAuthor)) {
 			setCourseAuthorsList((prevCourseAuthorsList) => [
 				...prevCourseAuthorsList,
 				editedAuthor,
@@ -102,9 +99,8 @@ const CourseForm = ({ isValid, setIsValid, editingCourse }) => {
 	};
 
 	const handleDeleteAuthor = (authorId) => {
-		const userToken = localStorage.getItem('token');
 		if (authorId) {
-			dispatch(performDeleteAuthor(authorId, userToken));
+			dispatch(performDeleteAuthor(authorId));
 		}
 	};
 
@@ -129,10 +125,8 @@ const CourseForm = ({ isValid, setIsValid, editingCourse }) => {
 			duration: parseInt(duration),
 			authors: courseAuthorsList.map((author) => author.id),
 		};
-		const userToken = localStorage.getItem('token');
-		if (editingCourse)
-			dispatch(performUpdateCourse(newCourse, userToken, courseId));
-		else dispatch(performAddCourse(newCourse, userToken));
+		if (editingCourse) dispatch(performUpdateCourse(newCourse, courseId));
+		else dispatch(performAddCourse(newCourse));
 		navigate('/courses/');
 	};
 

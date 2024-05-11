@@ -1,10 +1,10 @@
 import { addAuthor, deleteAuthor } from '../../services';
 import { addAuthorAction, deleteAuthorAction } from './actions';
 
-export const performAddAuthor = (newAuthor, userToken) => {
+export const performAddAuthor = (newAuthor) => {
 	return async function (dispatch) {
 		try {
-			const response = await addAuthor(newAuthor, userToken);
+			const response = await addAuthor(newAuthor);
 			if (response) dispatch(addAuthorAction(response));
 		} catch (error) {
 			console.error('Error during adding a new author -> thunk.js ', error);

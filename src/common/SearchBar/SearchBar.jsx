@@ -13,7 +13,7 @@ const SearchBar = ({ onSearchChange, buttonHandler }) => {
 				onChange={onSearchChange}
 				type='search'
 				name='search'
-				placeholderText={'Input text'}
+				placeholderText='Input text'
 			/>
 			<Button buttonText='Search' onClick={buttonHandler} type='text' />
 		</div>
