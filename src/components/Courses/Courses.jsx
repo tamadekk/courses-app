@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import propTypes from 'prop-types';
 
-import { getCourses, selectUserRole } from '../../store/selector';
+import { getCourses, getUser, selectUserRole } from '../../store/selector';
 
 import { getCurrentUser } from '../../store/users/thunk';
 
@@ -19,6 +19,7 @@ const Courses = ({ isAuthenticated, setAuthenticated }) => {
 	const [querry, setQuery] = useState(null);
 	const [filteredCourses, setFilteredCourses] = useState(null);
 	const courses = useSelector(getCourses);
+	const userData = useSelector(getUser);
 	const navigate = useNavigate();
 	const location = useLocation();
 	const dispatch = useDispatch();
@@ -35,8 +36,10 @@ const Courses = ({ isAuthenticated, setAuthenticated }) => {
 	}, [isAuthenticated, navigate, setAuthenticated, location.pathname]);
 
 	useEffect(() => {
-		dispatch(getCurrentUser());
-	}, [dispatch]);
+		if (userData.isAuth === false) {
+			dispatch(getCurrentUser());
+		}
+	}, [dispatch, userData]);
 
 	const currentUserRole = useSelector(selectUserRole);
 
@@ -51,11 +54,10 @@ const Courses = ({ isAuthenticated, setAuthenticated }) => {
 		);
 	};
 	const searchHandlerButton = () => {
-		if (!querry) return;
+		if (querry === null) return;
 		const lowercasedData = querry.toLowerCase();
 		const courseFiltered = getFilteredCourse(courses, lowercasedData);
 		setFilteredCourses(courseFiltered);
-		console.log(filteredCourses);
 	};
 
 	const authorAttributes = [

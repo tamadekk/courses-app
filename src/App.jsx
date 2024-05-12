@@ -2,19 +2,19 @@ import { useState, useEffect } from 'react';
 import { Routes, Route, Outlet, Navigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
-import { fetchCourses, fetchAuthors } from './services.js';
+import { fetchCourses, fetchAuthors } from './services';
 
-import { addCoursesAction } from './store/courses/actions.js';
+import { addCoursesAction } from './store/courses/actions';
 
-import { addAuthorsAction } from './store/authors/actions.js';
+import { addAuthorsAction } from './store/authors/actions';
 
-import PrivateRoute from './components/PrivateRoute/PrivateRoute.jsx';
+import PrivateRoute from './components/PrivateRoute/PrivateRoute';
 import Courses from './components/Courses/Courses';
 import Header from './components/Header/Header';
 import CourseInfo from './components/CourseInfo/CourseInfo';
 import Login from './components/Login/Login.jsx';
-import Registration from './components/Registration/Registration.jsx';
-import CourseForm from './components/CourseForm/CourseForm.jsx';
+import Registration from './components/Registration/Registration';
+import CourseForm from './components/CourseForm/CourseForm';
 
 const App = () => {
 	const [isAuthenticated, setAuthenticated] = useState(false);
@@ -56,8 +56,10 @@ const App = () => {
 	return (
 		<div>
 			<Routes>
-				{isUserAuthorized() && (
+				{isUserAuthorized() ? (
 					<Route path='/' element={<Navigate to='/courses' />} />
+				) : (
+					<Route path='/' element={<Navigate to='/login' />} />
 				)}
 
 				<Route

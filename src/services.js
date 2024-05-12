@@ -1,4 +1,5 @@
 const BASE_API_URL = 'http://localhost:4000';
+const userToken = localStorage.getItem('token');
 
 export const fetchCourses = () => {
 	return fetch(`${BASE_API_URL}/courses/all`)
@@ -52,7 +53,7 @@ export const userRegistration = async (userData) => {
 		console.error('Error during registration:', error);
 	}
 };
-export const userLogOut = async (userToken) => {
+export const userLogOut = async () => {
 	try {
 		const response = await fetch(`${BASE_API_URL}/logout/`, {
 			method: 'DELETE',
@@ -69,10 +70,9 @@ export const userLogOut = async (userToken) => {
 
 export const getUser = async () => {
 	try {
-		const token = localStorage.getItem('token');
 		const response = await fetch(`${BASE_API_URL}/users/me`, {
 			headers: {
-				Authorization: token,
+				Authorization: userToken,
 				'Content-Type': 'application/json',
 			},
 		});
@@ -83,7 +83,7 @@ export const getUser = async () => {
 	}
 };
 
-export const addCourse = async (newCourse, userToken) => {
+export const addCourse = async (newCourse) => {
 	try {
 		const response = await fetch(`${BASE_API_URL}/courses/add`, {
 			method: 'POST',
@@ -109,7 +109,7 @@ export const addCourse = async (newCourse, userToken) => {
 	}
 };
 
-export const deleteCourse = async (courseID, userToken) => {
+export const deleteCourse = async (courseID) => {
 	try {
 		const response = await fetch(`${BASE_API_URL}/courses/${courseID}`, {
 			method: 'DELETE',
@@ -128,7 +128,7 @@ export const deleteCourse = async (courseID, userToken) => {
 	}
 };
 
-export const updateCourse = async (updatedCourse, userToken, courseID) => {
+export const updateCourse = async (updatedCourse, courseID) => {
 	try {
 		const response = await fetch(`${BASE_API_URL}/courses/${courseID}`, {
 			method: 'PUT',
@@ -156,7 +156,6 @@ export const updateCourse = async (updatedCourse, userToken, courseID) => {
 
 export const addAuthor = async (newAuthor) => {
 	try {
-		const userToken = localStorage.getItem('token');
 		const response = await fetch(`${BASE_API_URL}/authors/add`, {
 			method: 'POST',
 			headers: {
@@ -180,7 +179,7 @@ export const addAuthor = async (newAuthor) => {
 	}
 };
 
-export const deleteAuthor = async (authorID, userToken) => {
+export const deleteAuthor = async (authorID) => {
 	try {
 		const response = await fetch(`${BASE_API_URL}/authors/${authorID}`, {
 			method: 'DELETE',
