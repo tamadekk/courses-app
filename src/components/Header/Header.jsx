@@ -13,22 +13,23 @@ import { getUser } from '../../store/selector';
 const Header = () => {
 	const dispatch = useDispatch();
 	const location = useLocation();
+	const userData = useSelector(getUser);
 	const handleLogout = () => {
 		const token = localStorage.getItem('token');
 		dispatch(performLogout(token));
 		localStorage.removeItem('token');
 		localStorage.removeItem('name');
 	};
+
 	const getIsLoggedIn = () => {
-		return localStorage.getItem('token');
+		return !!userData.id;
 	};
 
-	const userName = useSelector(getUser);
 	return (
 		<header className={styles.header}>
 			<Logo />
 			{getIsLoggedIn() ? (
-				<p className={styles.p}>{userName.name ?? userName.email}</p>
+				<p className={styles.p}>{userData.name ?? userData.email}</p>
 			) : (
 				''
 			)}
