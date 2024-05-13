@@ -69,11 +69,12 @@ export const userLogOut = async () => {
 };
 
 export const getUser = async () => {
+	const userToken = localStorage.getItem('token');
 	try {
 		const response = await fetch(`${BASE_API_URL}/users/me`, {
 			headers: {
-				Authorization: userToken,
 				'Content-Type': 'application/json',
+				Authorization: userToken,
 			},
 		});
 		const data = await response.json();
