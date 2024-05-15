@@ -11,7 +11,8 @@ export const userInitialState = {
 export const userReducer = (state = userInitialState, action) => {
 	switch (action.type) {
 		case ADD_USER:
-			const { name, email, token } = action.payload;
+			const { name, email } = action.payload.user;
+			const token = action.payload.result;
 			if (action.payload.result) {
 				return {
 					isAuth: !!token,

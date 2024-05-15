@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import propTypes from 'prop-types';
 
-import { getCourses, getUser, selectUserRole } from '../../store/selector';
+import { getCourses, selectUserRole } from '../../store/selector';
 
 import { getCurrentUser } from '../../store/users/thunk';
 
@@ -19,7 +19,7 @@ const Courses = ({ isAuthenticated, setAuthenticated }) => {
 	const [querry, setQuery] = useState(null);
 	const [filteredCourses, setFilteredCourses] = useState(null);
 	const courses = useSelector(getCourses);
-	const userData = useSelector(getUser);
+	const currentUserRole = useSelector(selectUserRole);
 	const navigate = useNavigate();
 	const location = useLocation();
 	const dispatch = useDispatch();
@@ -34,14 +34,11 @@ const Courses = ({ isAuthenticated, setAuthenticated }) => {
 			}
 		}
 	}, [isAuthenticated, navigate, setAuthenticated, location.pathname]);
-
 	useEffect(() => {
-		if (userData.isAuth === false) {
+		if (!currentUserRole) {
 			dispatch(getCurrentUser());
 		}
-	}, [dispatch, userData]);
-
-	const currentUserRole = useSelector(selectUserRole);
+	}, [dispatch, currentUserRole]);
 
 	const onSearchChange = (input) => {
 		setQuery(input.target.value);
