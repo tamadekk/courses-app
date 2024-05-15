@@ -1,5 +1,6 @@
+import store from './store';
+import { getUserToken } from './helpers/getUserToken';
 const BASE_API_URL = 'http://localhost:4000';
-const userToken = localStorage.getItem('token');
 
 export const fetchCourses = () => {
 	return fetch(`${BASE_API_URL}/courses/all`)
@@ -54,12 +55,13 @@ export const userRegistration = async (userData) => {
 	}
 };
 export const userLogOut = async () => {
+	console.log(store.getState());
 	try {
 		const response = await fetch(`${BASE_API_URL}/logout/`, {
 			method: 'DELETE',
 			headers: {
 				'Content-Type': 'application/json',
-				Authorization: `${userToken}`,
+				Authorization: getUserToken(),
 			},
 		});
 		return response;
@@ -72,8 +74,8 @@ export const getUser = async () => {
 	try {
 		const response = await fetch(`${BASE_API_URL}/users/me`, {
 			headers: {
-				Authorization: userToken,
 				'Content-Type': 'application/json',
+				Authorization: getUserToken(),
 			},
 		});
 		const data = await response.json();
@@ -90,7 +92,7 @@ export const addCourse = async (newCourse) => {
 			body: JSON.stringify(newCourse),
 			headers: {
 				'Content-Type': 'application/json',
-				Authorization: `${userToken}`,
+				Authorization: getUserToken(),
 			},
 		});
 
@@ -116,7 +118,7 @@ export const deleteCourse = async (courseID) => {
 			headers: {
 				id: courseID,
 				'Content-type': 'application/json',
-				Authorization: userToken,
+				Authorization: getUserToken(),
 			},
 		});
 		return response;
@@ -135,7 +137,7 @@ export const updateCourse = async (updatedCourse, courseID) => {
 			body: JSON.stringify(updatedCourse),
 			headers: {
 				'Content-Type': 'application/json',
-				Authorization: `${userToken}`,
+				Authorization: getUserToken(),
 			},
 		});
 
@@ -160,7 +162,7 @@ export const addAuthor = async (newAuthor) => {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
-				Authorization: userToken,
+				Authorization: getUserToken(),
 			},
 			body: JSON.stringify(newAuthor),
 		});
@@ -186,7 +188,7 @@ export const deleteAuthor = async (authorID) => {
 			headers: {
 				id: authorID,
 				'Content-type': 'application/json',
-				Authorization: userToken,
+				Authorization: getUserToken(),
 			},
 		});
 		return response;
