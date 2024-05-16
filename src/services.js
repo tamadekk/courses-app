@@ -1,4 +1,3 @@
-import store from './store';
 import { getUserToken } from './helpers/getUserToken';
 const BASE_API_URL = 'http://localhost:4000';
 
@@ -55,7 +54,6 @@ export const userRegistration = async (userData) => {
 	}
 };
 export const userLogOut = async () => {
-	console.log(store.getState());
 	try {
 		const response = await fetch(`${BASE_API_URL}/logout/`, {
 			method: 'DELETE',

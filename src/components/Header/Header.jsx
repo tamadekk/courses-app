@@ -9,14 +9,14 @@ import styles from './Header.module.css';
 import Logo from './components/Logo/Logo';
 import Button from './../../common/Button/Button';
 import { getUser } from '../../store/selector';
+import { getUserToken } from '../../helpers/getUserToken';
 
 const Header = () => {
 	const dispatch = useDispatch();
 	const location = useLocation();
 	const userData = useSelector(getUser);
 	const handleLogout = () => {
-		const token = localStorage.getItem('token');
-		dispatch(performLogout(token));
+		dispatch(performLogout(getUserToken()));
 		localStorage.removeItem('token');
 		localStorage.removeItem('name');
 	};
