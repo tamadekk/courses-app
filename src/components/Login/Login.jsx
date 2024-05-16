@@ -63,6 +63,7 @@ const Login = ({ isValid, setIsValid }) => {
 								onChange={handleEmailChange}
 								value={email}
 								isValid={isValid}
+								placeholderText='Input Text'
 							/>
 						</label>
 						<label>
@@ -74,6 +75,7 @@ const Login = ({ isValid, setIsValid }) => {
 								onChange={handlePasswordChange}
 								value={password}
 								isValid={isValid}
+								placeholderText='Input Text'
 							/>
 						</label>
 						<Button buttonText='Login' type='submit' />

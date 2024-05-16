@@ -4,8 +4,16 @@ import { useState } from 'react';
 
 import styles from './Input.module.css';
 
-const Input = ({ onChange, isRequired, type, name, isValid = true }) => {
-	const [, setValue] = useState('');
+const Input = ({
+	onChange,
+	isRequired,
+	type,
+	name,
+	isValid = true,
+	placeholderText,
+	value,
+}) => {
+	const [test, setValue] = useState('');
 
 	const handleInputChange = (event) => {
 		const inputValue = event.target.value;
@@ -19,9 +27,10 @@ const Input = ({ onChange, isRequired, type, name, isValid = true }) => {
 				className={isValid ? styles.validinput : styles.invalidinput}
 				type={type}
 				name={name}
-				placeholder='Input text'
+				placeholder={placeholderText}
 				onChange={handleInputChange}
 				{...(isRequired ? { required: true } : {})}
+				value={value ? value : test}
 			/>
 			{!isValid && (
 				<p className={styles.errorMessage}>

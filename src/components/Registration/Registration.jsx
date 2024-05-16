@@ -4,10 +4,10 @@ import propTypes from 'prop-types';
 
 import { Link } from 'react-router-dom';
 
+import { userRegistration } from '../../services';
+
 import Header from '../Header/Header';
-
 import Input from '../../common/Input/Input';
-
 import Button from '../../common/Button/Button';
 
 import styles from './Registration.module.css';
@@ -24,25 +24,7 @@ const Registration = ({ isValid, setIsValid, userData, setUserData }) => {
 			setIsValid(false);
 			return;
 		}
-		fetch('http://localhost:4000/register/', {
-			method: 'POST',
-			body: JSON.stringify(userData),
-			headers: {
-				'Content-Type': 'application/json',
-			},
-		})
-			.then((res) => res.json())
-			.then((data) => {
-				if (data.successful) {
-					localStorage.setItem('token', data.result);
-					window.location.href = '/courses';
-				} else {
-					console.error('Invalid data');
-				}
-			})
-			.catch((error) => {
-				console.error('Error during registration:', error);
-			});
+		userRegistration(userData);
 	};
 
 	return (
@@ -60,6 +42,7 @@ const Registration = ({ isValid, setIsValid, userData, setUserData }) => {
 								onChange={handleInputChange}
 								value={userData.name}
 								isValid={isValid}
+								placeholderText='Input Text'
 							/>
 						</label>
 						<label>
@@ -70,6 +53,7 @@ const Registration = ({ isValid, setIsValid, userData, setUserData }) => {
 								onChange={handleInputChange}
 								value={userData.email}
 								isValid={isValid}
+								placeholderText='Input Text'
 							/>
 						</label>
 						<label>
@@ -80,6 +64,7 @@ const Registration = ({ isValid, setIsValid, userData, setUserData }) => {
 								onChange={handleInputChange}
 								value={userData.password}
 								isValid={isValid}
+								placeholderText='Input Text'
 							/>
 						</label>
 						<Button
