@@ -192,6 +192,7 @@ const CourseForm = ({ isValid, setIsValid, editingCourse }) => {
 									onChange={handleAuthorChange}
 									labelText='Author name'
 									placeholderText='Input text'
+									testID='authorName-input'
 								/>
 								<Button
 									buttonText='create author'

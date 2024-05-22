@@ -12,6 +12,7 @@ const Input = ({
 	isValid = true,
 	placeholderText,
 	value,
+	testID,
 }) => {
 	const [test, setValue] = useState('');
 
@@ -31,6 +32,7 @@ const Input = ({
 				onChange={handleInputChange}
 				{...(isRequired ? { required: true } : {})}
 				value={value ? value : test}
+				data-testid={testID}
 			/>
 			{!isValid && (
 				<p className={styles.errorMessage}>

@@ -26,11 +26,10 @@ const CourseCard = ({ isAuthenticated, courses }) => {
 	const handleDeleteCourse = (courseID) => {
 		dispatch(performCourseDelete(courseID, userToken));
 	};
-
 	return (
 		<div>
 			{courses.map((item) => (
-				<div className={styles.wrapper} key={item.id}>
+				<div className={styles.wrapper} key={item.id} data-testid='course-card'>
 					<div className={styles.firstsection}>
 						<h1>{item.title}</h1>
 						<p>{item.description}</p>

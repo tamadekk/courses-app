@@ -1,5 +1,4 @@
 import { configureStore } from '@reduxjs/toolkit';
-
 import rootReducer from './rootReducer';
 
 import { coursesInitialState } from './courses/reducer';
