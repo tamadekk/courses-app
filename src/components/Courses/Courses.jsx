@@ -41,6 +41,7 @@ const Courses = ({ isAuthenticated, setAuthenticated }) => {
 	}, [dispatch, currentUserRole]);
 
 	const onSearchChange = (input) => {
+		if (!input.target.value.length > 0) setFilteredCourses(null);
 		setQuery(input.target.value);
 	};
 	const getFilteredCourse = (courses, lowercasedData) => {

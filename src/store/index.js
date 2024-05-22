@@ -1,19 +1,18 @@
 import { configureStore } from '@reduxjs/toolkit';
-
 import rootReducer from './rootReducer';
 
 import { coursesInitialState } from './courses/reducer';
 import { authorsInitialState } from './authors/reducer';
 import { userInitialState } from './users/reducer';
 
-const appInitialState = {
+const preloadedState = {
 	courses: coursesInitialState,
 	authors: authorsInitialState,
 	user: userInitialState,
 };
-const store = configureStore({
-	reducer: rootReducer,
-	preloadedState: appInitialState,
-});
-
-export default store;
+export const setupStore = (preloadedState) => {
+	return configureStore({
+		reducer: rootReducer,
+		preloadedState,
+	});
+};

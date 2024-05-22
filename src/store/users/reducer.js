@@ -30,7 +30,7 @@ export const userReducer = (state = userInitialState, action) => {
 				token: '',
 			};
 		case GET_CURRENT_USER:
-			return action.payload.result;
+			return { ...action.payload.result, isAuth: true };
 
 		default:
 			return state;
